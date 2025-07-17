@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
-import background from "./assets/BG_home.png";
+import background from "./assets/BG_Home.png";
 
 const Settings = () => {
     const navigate = useNavigate();
