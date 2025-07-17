@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "/pictures/tabletHg1.png";
+import background from "/tabletHg1.png";
 import Layout from "./components/Layout";
 export default function LoginPage() {
     const [email, setEmail] = useState("");

@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "./components/Layout";
-import background from "./assets/BG_home2.png";
+import background from "/BG_home2.png";
 
 const HomePage = () => {
     return (

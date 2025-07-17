@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "./components/Layout";
-import background from "./assets/BG_home2.png";
+import background from "/BG_home2.png";
 
 const Impressum = () => {
     return (

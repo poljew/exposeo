@@ -1,7 +1,7 @@
 ﻿import React, { useState } from "react";
 import { supabase } from "./supabaseClient";
 import { generateExposeText } from "./ai/generateExposeText";
-import background from "./assets/BG_Home1.png";
+import background from "/BG_Home1.png";
 import { useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 

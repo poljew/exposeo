@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
-import background from "./assets/bg-dashboard.png";
+import background from "/bg-dashboard.png";
 import html2pdf from "html2pdf.js";
 
 const ExposeDetail = () => {

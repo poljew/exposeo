@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "./assets/bg-dashboard.png";
+import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 
 const ExposeList = () => {
