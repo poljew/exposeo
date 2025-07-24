@@ -20,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
+                <Route path="/" element={<HomePage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/expose/new" element={<NewExpose />} />
                 <Route path="/expose/list" element={<ExposeList />} />
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/preise" element={<Preise />} />
                 <Route path="/impressum" element={<Impressum />} />
+                <Route path="*" element={<div>404 - Seite nicht gefunden</div>} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
