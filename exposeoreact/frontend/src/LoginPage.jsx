@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "/tabletHg1.png";
+//import background from "/tabletHg1.png";
 import Layout from "./components/Layout";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -9,6 +9,7 @@ export default function LoginPage() {
     const [errorMsg, setErrorMsg] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const background = "/assets/tabletHg1.png";
 
     useEffect(() => {
         const checkSession = async () => {

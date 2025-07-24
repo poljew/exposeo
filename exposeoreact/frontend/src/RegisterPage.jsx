@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "/bg-dashboard.png";
+//import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 
 export default function RegisterPage() {
@@ -10,6 +10,7 @@ export default function RegisterPage() {
     const [errorMsg, setErrorMsg] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const background = "/assets/bg-dashboard.png";
 
     const handleRegister = async (e) => {
         e.preventDefault();

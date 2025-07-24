@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "./components/Layout";
-import background from "/BG_home2.png";
-
+//import background from "/BG_home2.png";
+const background = "/assets/BG_home2.png";
 const HomePage = () => {
     return (
         <Layout>

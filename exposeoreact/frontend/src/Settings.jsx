@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
-import background from "/BG_Home.png";
+//import background from "/BG_Home.png";
 
 const Settings = () => {
     const navigate = useNavigate();
@@ -12,6 +12,7 @@ const Settings = () => {
     const [password, setPassword] = useState("");
     const [abo, setAbo] = useState("free");
     const [loading, setLoading] = useState(false);
+    const background = "/assets/BG_Home.png";
     
 
     const fetchUserData = async () => {

@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "/bg-dashboard.png";
+//import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 import { generateExposeText } from "./ai/generateExposeText";
 
@@ -14,6 +14,7 @@ const EditExpose = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const textAreaRef = useRef();
+    const background = "/assets/bg-dashboard.png";
 
     useEffect(() => {
         const fetchExpose = async () => {

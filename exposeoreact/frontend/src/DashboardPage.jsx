@@ -1,11 +1,12 @@
 ﻿import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut, PlusCircle, Settings, List } from "lucide-react";
-import background from "/BG_home2.png";
+//import background from "/BG_home2.png";
 import Layout from "./components/Layout";
 
 const DashboardPage = () => {
     const navigate = useNavigate();
+    const background = "/assets/BG_home2.png";
 
     const actions = [
         { label: "Neues Exposé", icon: <PlusCircle className="w-6 h-6" />, onClick: () => navigate("/expose/new") },

@@ -1,13 +1,14 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-import background from "/bg-dashboard.png";
+//import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 
 const ExposeList = () => {
     const [exposes, setExposes] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const background = "/assets/bg-dashboard.png";
 
     const fetchExposes = async () => {
         setLoading(true);
