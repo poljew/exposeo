@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                {/*<Route path="/" element={<HomePage />} />*/}
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/expose/new" element={<NewExpose />} />
                 <Route path="/expose/list" element={<ExposeList />} />
