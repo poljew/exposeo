@@ -340,7 +340,7 @@ const NewExpose = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                     Expos&eacute; erstellen
                 </button>

@@ -12,4 +12,23 @@
     <None Remove="frontend\src\src\**" />
     <TypeScriptConfiguration Remove="frontend\src\src\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="frontend\public\backGroundHouse.png" />
+    <None Remove="frontend\public\backGroundHouse1.png" />
+    <None Remove="frontend\public\bg-dashboard.png" />
+    <None Remove="frontend\public\bg_1.png" />
+    <None Remove="frontend\public\bg_2.png" />
+    <None Remove="frontend\public\bg_3.png" />
+    <None Remove="frontend\public\BG_Home.png" />
+    <None Remove="frontend\public\BG_Home1.png" />
+    <None Remove="frontend\public\BG_home2.png" />
+    <None Remove="frontend\public\deepseek.png" />
+    <None Remove="frontend\public\Logo1.png" />
+    <None Remove="frontend\public\Logo2.png" />
+    <None Remove="frontend\public\Logo3.png" />
+    <None Remove="frontend\public\Logo4.png" />
+    <None Remove="frontend\public\Logo4_1.png" />
+    <None Remove="frontend\public\react.svg" />
+    <None Remove="frontend\public\vite.svg" />
+  </ItemGroup>
 </Project>

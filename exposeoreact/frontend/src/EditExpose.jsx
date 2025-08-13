@@ -218,7 +218,7 @@ const EditExpose = () => {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-3 pt-4">
-                                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" disabled={saving}>
+                                    <button type="submit" className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700" disabled={saving}>
                                         Speichern
                                     </button>
                                     <button

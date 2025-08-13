@@ -171,7 +171,7 @@ const Settings = () => {
                                             disabled={abo === plan.tier || loading}
                                             className={`mt-4 w-full px-4 py-2 rounded ${abo === plan.tier
                                                     ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                                                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                                                    : "bg-cyan-600 hover:bg-cyan-700 text-white"
                                                 }`}
                                         >
                                             {abo === plan.tier ? "Aktueller Tarif" : `Zu ${plan.label} wechseln`}
@@ -184,7 +184,7 @@ const Settings = () => {
 
                         <button
                             onClick={handleSave}
-                            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
+                            className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white font-medium py-2 px-4 rounded"
                         >
                             &Auml;nderungen speichern
                         </button>

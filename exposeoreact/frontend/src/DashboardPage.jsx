@@ -30,7 +30,7 @@ const DashboardPage = () => {
                         <button
                             key={i}
                             onClick={action.onClick}
-                            className="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow transition"
+                            className="flex items-center justify-center gap-3 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-3 rounded-lg shadow transition"
                         >
                             {action.icon}
                             <span className="font-medium">{action.label}</span>

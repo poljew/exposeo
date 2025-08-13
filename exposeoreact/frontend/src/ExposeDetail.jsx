@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
-//import background from "/bg-dashboard.png";
 import html2pdf from "html2pdf.js";
+
 
 const ExposeDetail = () => {
     const { id } = useParams();
@@ -26,6 +26,14 @@ const ExposeDetail = () => {
 
     const renderTextWithImages = () => {
         const usedIndices = new Set();
+        const pdfWidthMM = 210;
+        const pdfHeightMM = 297;
+        const marginMM = 10;
+
+        const mmToPx = (mm) => Math.round(mm * 96 / 25.4);
+
+        const pageMaxWidthPx = mmToPx(pdfWidthMM - 2 * marginMM);
+        const pageMaxHeightPx = mmToPx(pdfHeightMM - 2 * marginMM);
 
         const parts = (expose.text || "").split(/\[BILD(\d+)\]/g).map((part, i) => {
             if (i % 2 === 1) {
@@ -38,7 +46,16 @@ const ExposeDetail = () => {
                             key={`img-${i}`}
                             src={url}
                             alt={`Bild ${index + 1}`}
-                            className="w-full h-64 object-cover rounded my-4"
+                            style={{
+                                width: "100%",
+                                maxWidth: `${pageMaxWidthPx}px`,
+                                maxHeight: `${pageMaxHeightPx}px`,
+                                height: "auto",
+                                objectFit: "contain",
+                                pageBreakInside: "avoid",
+                                breakInside: "avoid",
+                                margin: "1rem 0",
+                            }}
                         />
                     );
                 }
@@ -54,7 +71,16 @@ const ExposeDetail = () => {
                         key={`unused-${index}`}
                         src={url}
                         alt={`Bild ${index + 1}`}
-                        className="w-full h-64 object-cover rounded my-4"
+                        style={{
+                            width: "100%",
+                            maxWidth: `${pageMaxWidthPx}px`,
+                            maxHeight: `${pageMaxHeightPx}px`,
+                            height: "auto",
+                            objectFit: "contain",
+                            pageBreakInside: "avoid",
+                            breakInside: "avoid",
+                            margin: "1rem 0",
+                        }}
                     />
                 )
             )
@@ -87,6 +113,8 @@ const ExposeDetail = () => {
         html2pdf().set(opt).from(element).save();
     };
 
+        
+
     const handleDelete = async (id, bilder = []) => {
         if (!window.confirm("Dieses Exposé und alle Bilder wirklich löschen?")) return;
 
@@ -116,14 +144,14 @@ const ExposeDetail = () => {
                         onClick={() => navigate(-1)}
                         className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zurück
+                        &larr; Zur&uuml;ck
                     </button>
 
                     <div ref={exportRef} className="bg-white p-6 rounded shadow" id="pdf-content">
                         <div className="text-sm font-semibold underline mb-4">
                             <div>{expose.adresse}</div>
                             <div>
-                                Wohnfläche: {expose.wohnflaeche} m² | Grundstück: {expose.grundstueck} m² | Baujahr: {expose.baujahr}
+                                Wohnfl&auml;che: {expose.wohnflaeche} m&sup2; | Grundst&uuml;ck: {expose.grundstueck} m&sup2; | Baujahr: {expose.baujahr}
                             </div>
                         </div>
                         <div className="text-gray-800 whitespace-pre-wrap mb-6">
@@ -133,7 +161,7 @@ const ExposeDetail = () => {
 
                     <div className="flex justify-between no-print mt-6">
                         <button
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
                             onClick={() => navigate(`/expose/edit/${expose.id}`)}
                         >
                             Bearbeiten
@@ -142,7 +170,7 @@ const ExposeDetail = () => {
                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                             onClick={() => handleDelete(expose.id, expose.bilder)}
                         >
-                            Löschen
+                            L&ouml;schen
                         </button>
                         <button
                             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"

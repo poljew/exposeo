@@ -19,7 +19,7 @@ const HomePage = () => {
                     </p>
                     <Link
                         to="/register"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded"
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-6 rounded"
                     >
                         Jetzt kostenlos starten
                     </Link>

@@ -100,7 +100,7 @@ const ExposeList = () => {
 
                                     <div className="mt-4 flex justify-between">
                                         <button
-                                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                            className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
                                             onClick={() => navigate(`/expose/edit/${expose.id}`)}
                                         >
                                             Bearbeiten

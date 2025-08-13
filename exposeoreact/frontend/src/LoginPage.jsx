@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 //import background from "/tabletHg1.png";
 import Layout from "./components/Layout";
+
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const background = "/assets/tabletHg1.png";
+    const background = "/assets/tabletHg1.png";    
 
     useEffect(() => {
         const checkSession = async () => {
@@ -83,7 +84,7 @@ export default function LoginPage() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                    className="w-full bg-cyan-600 text-white py-2 rounded hover:bg-cyan-700"
                 >
                     {loading ? "Anmelden..." : "Login"}
                 </button>
