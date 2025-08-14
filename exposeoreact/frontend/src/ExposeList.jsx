@@ -10,12 +10,16 @@ const ExposeList = () => {
     const navigate = useNavigate();
     const background = "/assets/bg-dashboard.png";
 
+    
+
     const fetchExposes = async () => {
         setLoading(true);
+        const { data: { user } } = await supabase.auth.getUser();
         const { data, error } = await supabase
             .from("exposes")
             .select("*")
-            .order("created_at", { ascending: false });
+            .order("created_at", { ascending: false })
+            .eq('user_id', user.id);
 
         if (error) {
             console.error("Fehler beim Laden:", error.message);
@@ -24,6 +28,7 @@ const ExposeList = () => {
         }
         setLoading(false);
     };
+
 
     useEffect(() => {
         fetchExposes();

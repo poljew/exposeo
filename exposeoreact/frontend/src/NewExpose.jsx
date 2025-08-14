@@ -76,6 +76,7 @@ const NewExpose = () => {
             }
             
             const exposeText = await generateExposeText(form);
+            const { data: { user } } = await supabase.auth.getUser();
             
             const { data, error } = await supabase.from("exposes").insert([
                 {
@@ -94,9 +95,11 @@ const NewExpose = () => {
                     preis: form.preis,
                     bilder: imageUrls,
                     text: exposeText,
-                    created_at: form.createdAt
+                    created_at: form.createdAt,
+                    user_id: user.id
                 },
             ]);
+            
 
             if (error) {
                 console.error("Speicher-Fehler:", error.message);
@@ -224,7 +227,7 @@ const NewExpose = () => {
                     <fieldset>
                         <legend className="font-semibold mb-2">Ausstattung</legend>
                         <div className="space-y-1">
-                                    {["Balkon", "Einbauk&uuml;che", "Garage"].map((item) => (
+                                    {["Balkon", "Einbauküche", "Garage"].map((item) => (
                                 <label key={item} className="block">
                                     <input
                                         type="checkbox"
