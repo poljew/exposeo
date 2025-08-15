@@ -36,11 +36,10 @@ export default function RegisterPage() {
     return (
         <Layout>
             <div
-                className="min-h-screen w-screen bg-no-repeat bg-cover bg-center flex flex-col justify-center items-center px-4 py-6"
+                className="min-h-screen w-screen bg-no-repeat bg-cover bg-center flex items-center justify-center px-4 py-6"
                 style={{ backgroundImage: `url(${background})` }}
             >
-                {/* Formular Container */}
-                <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-lg w-full max-w-md mb-20">
+                <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-lg w-full max-w-md">
                     <form onSubmit={handleRegister} className="w-full">
                         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
                             Registrieren
@@ -81,21 +80,18 @@ export default function RegisterPage() {
                                 {message}
                             </p>
                         )}
-                    </form>
-                </div>
 
-                {/* Sticky Footer für Mobile */}
-                <div className="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md py-4 text-center border-t border-gray-200 md:hidden">
-                    <p className="text-sm">
-                        Bereits registriert?{" "}
-                        <button
-                            type="button"
-                            onClick={() => navigate("/login")}
-                            className="text-blue-600 hover:underline"
-                        >
-                            Zur&uuml;ck zum Login
-                        </button>
-                    </p>
+                        <p className="mt-6 text-center text-sm">
+                            Bereits registriert?{" "}
+                            <button
+                                type="button"
+                                onClick={() => navigate("/login")}
+                                className="text-blue-600 hover:underline"
+                            >
+                                Zur&uuml;ck zum Login
+                            </button>
+                        </p>
+                    </form>
                 </div>
             </div>
         </Layout>

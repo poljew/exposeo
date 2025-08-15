@@ -39,42 +39,60 @@ const ExposeDetail = () => {
                 const url = expose.bilder?.[index];
                 if (url) {
                     return (
-                        <img
+                        <div
                             key={`img-${i}`}
-                            src={url}
-                            alt={`Bild ${index + 1}`}
                             style={{
-                                width: "100%",
-                                maxWidth: `${pageMaxWidthPx}px`,
-                                maxHeight: `${pageMaxHeightPx}px`,
-                                height: "auto",
-                                objectFit: "contain",
-                                margin: "1rem 0"
+                                pageBreakInside: "avoid",
+                                margin: "1rem 0",
+                                display: "flex",
+                                justifyContent: "center",
                             }}
-                        />
+                        >
+                            <img
+                                src={url}
+                                alt={`Bild ${index + 1}`}
+                                style={{
+                                    maxWidth: `${pageMaxWidthPx}px`,
+                                    maxHeight: `${pageMaxHeightPx}px`,
+                                    width: "auto",
+                                    height: "auto",
+                                }}
+                            />
+                        </div>
                     );
                 }
                 return null;
             }
-            return <p key={`text-${i}`} className="mb-2">{part}</p>;
+            return (
+                <p key={`text-${i}`} className="mb-2" style={{ pageBreakInside: "avoid" }}>
+                    {part}
+                </p>
+            );
         });
 
         const unusedImages = expose.bilder
             ?.map((url, index) =>
                 usedIndices.has(index) ? null : (
-                    <img
+                    <div
                         key={`unused-${index}`}
-                        src={url}
-                        alt={`Bild ${index + 1}`}
                         style={{
-                            width: "100%",
-                            maxWidth: `${pageMaxWidthPx}px`,
-                            maxHeight: `${pageMaxHeightPx}px`,
-                            height: "auto",
-                            objectFit: "contain",
-                            margin: "1rem 0"
+                            pageBreakInside: "avoid",
+                            margin: "1rem 0",
+                            display: "flex",
+                            justifyContent: "center",
                         }}
-                    />
+                    >
+                        <img
+                            src={url}
+                            alt={`Bild ${index + 1}`}
+                            style={{
+                                maxWidth: `${pageMaxWidthPx}px`,
+                                maxHeight: `${pageMaxHeightPx}px`,
+                                width: "auto",
+                                height: "auto",
+                            }}
+                        />
+                    </div>
                 )
             )
             .filter(Boolean);
@@ -82,9 +100,7 @@ const ExposeDetail = () => {
         return (
             <div>
                 {parts}
-                {unusedImages?.length > 0 && (
-                    <div className="mt-6">{unusedImages}</div>
-                )}
+                {unusedImages?.length > 0 && <div className="mt-6">{unusedImages}</div>}
             </div>
         );
     };
@@ -130,14 +146,14 @@ const ExposeDetail = () => {
                         onClick={() => navigate(-1)}
                         className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zurück
+                        &larr; Zur&uuml;ck
                     </button>
 
                     <div ref={exportRef} className="bg-white p-4 sm:p-6 rounded shadow">
                         <div className="text-sm font-semibold underline mb-4">
                             <div>{expose.adresse}</div>
                             <div>
-                                Wohnfläche: {expose.wohnflaeche} m² | Grundstück: {expose.grundstueck} m² | Baujahr: {expose.baujahr}
+                                Wohnfl&auml;che: {expose.wohnflaeche} m&sup2; | Grundst&uuml;ck: {expose.grundstueck} m&sup2; | Baujahr: {expose.baujahr}
                             </div>
                         </div>
                         <div className="text-gray-800 whitespace-pre-wrap mb-6">
@@ -145,7 +161,6 @@ const ExposeDetail = () => {
                         </div>
                     </div>
 
-                    {/* Buttons mobil untereinander */}
                     <div className="flex flex-col sm:flex-row gap-3 mt-6">
                         <button
                             className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700 w-full sm:w-auto"
@@ -157,7 +172,7 @@ const ExposeDetail = () => {
                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full sm:w-auto"
                             onClick={() => handleDelete(expose.id, expose.bilder)}
                         >
-                            Löschen
+                            L&ouml;schen
                         </button>
                         <button
                             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full sm:w-auto"
