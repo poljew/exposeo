@@ -1,7 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-//import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 
 const ExposeList = () => {
@@ -9,8 +8,6 @@ const ExposeList = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const background = "/assets/bg-dashboard.png";
-
-    
 
     const fetchExposes = async () => {
         setLoading(true);
@@ -28,7 +25,6 @@ const ExposeList = () => {
         }
         setLoading(false);
     };
-
 
     useEffect(() => {
         fetchExposes();
@@ -71,25 +67,29 @@ const ExposeList = () => {
     return (
         <Layout>
             <div
-                className="min-h-screen bg-cover bg-center bg-no-repeat px-6 py-10"
+                className="min-h-screen bg-cover bg-center bg-no-repeat px-4 sm:px-6 py-8"
                 style={{ backgroundImage: `url(${background})` }}
             >
-                <div className="bg-white/90 backdrop-blur-md p-8 rounded-xl max-w-6xl mx-auto">
+                <div className="bg-white/90 backdrop-blur-md p-6 sm:p-8 rounded-xl max-w-6xl mx-auto">
                     <button
                         onClick={() => navigate("/dashboard")}
-                        className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
+                        className="mb-6 w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
                         &larr; Zur&uuml;ck zum Dashboard
                     </button>
-                    <h1 className="text-3xl font-bold text-center mb-8">Meine Exposés</h1>
+
+                    <h1 className="text-2xl sm:text-3xl font-bold text-center mb-8">Meine Exposés</h1>
 
                     {loading ? (
                         <p className="text-center text-gray-700">Lade Exposés...</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {exposes.map((expose) => (
-                                <div key={expose.id} className="bg-white shadow-lg rounded-xl overflow-hidden p-4">
-                                    <h2 className="text-xl font-semibold mb-2">{expose.adresse}</h2>
+                                <div
+                                    key={expose.id}
+                                    className="bg-white shadow-lg rounded-xl overflow-hidden p-4 flex flex-col"
+                                >
+                                    <h2 className="text-lg sm:text-xl font-semibold mb-2">{expose.adresse}</h2>
                                     <p><strong>Wohnfl&auml;che:</strong> {expose.wohnflaeche} m²</p>
                                     <p><strong>Grundst&uuml;ck:</strong> {expose.grundstueck} m²</p>
                                     <p><strong>Baujahr:</strong> {expose.baujahr}</p>
@@ -103,15 +103,15 @@ const ExposeList = () => {
                                         />
                                     )}
 
-                                    <div className="mt-4 flex justify-between">
+                                    <div className="mt-4 flex flex-col gap-2">
                                         <button
-                                            className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
+                                            className="w-full bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
                                             onClick={() => navigate(`/expose/edit/${expose.id}`)}
                                         >
                                             Bearbeiten
                                         </button>
                                         <button
-                                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                            className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                                             onClick={() => handleDelete(expose.id, expose.bilder)}
                                         >
                                             L&ouml;schen

@@ -6,7 +6,7 @@ import Layout from "./components/Layout";
 export default function RegisterPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState(""); // NEU
+    const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const background = "/assets/bg-dashboard.png";
@@ -18,7 +18,7 @@ export default function RegisterPage() {
 
         const { error } = await supabase.auth.signUp({
             email,
-            password
+            password,
         });
 
         setLoading(false);
@@ -27,7 +27,6 @@ export default function RegisterPage() {
             setMessage("X " + error.message);
         } else {
             setMessage("✅ Registrierungslink wurde an deine E-Mail gesendet.");
-            // Redirect verzögern, damit Meldung sichtbar bleibt
             setTimeout(() => {
                 navigate("/dashboard");
             }, 3000);
@@ -37,19 +36,19 @@ export default function RegisterPage() {
     return (
         <Layout>
             <div
-                className="h-screen w-screen bg-no-repeat bg-cover bg-center flex items-center justify-center"
+                className="min-h-screen w-screen bg-no-repeat bg-cover bg-center flex flex-col justify-center items-center px-4 py-6"
                 style={{ backgroundImage: `url(${background})` }}
             >
-                <div className="bg-white/90 backdrop-blur-md p-8 rounded-xl max-w-4xl mx-auto">
-                    <form
-                        onSubmit={handleRegister}
-                        className="bg-white p-8 rounded shadow-md w-full max-w-md"
-                    >
-                        <h2 className="text-2xl font-bold mb-6 text-center">Registrieren</h2>
+                {/* Formular Container */}
+                <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-lg w-full max-w-md mb-20">
+                    <form onSubmit={handleRegister} className="w-full">
+                        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+                            Registrieren
+                        </h2>
 
                         <input
                             type="email"
-                            className="w-full p-2 mb-4 border rounded"
+                            className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
                             placeholder="E-Mail"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -58,7 +57,7 @@ export default function RegisterPage() {
 
                         <input
                             type="password"
-                            className="w-full p-2 mb-4 border rounded"
+                            className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
                             placeholder="Passwort"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -68,33 +67,35 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                            className={`w-full bg-green-600 text-white py-3 rounded hover:bg-green-700 transition-colors duration-200 ${loading ? "opacity-50 cursor-not-allowed" : ""
+                                }`}
                         >
                             {loading ? "Registrieren..." : "Registrieren"}
                         </button>
 
                         {message && (
                             <p
-                                className={`mt-4 text-center text-sm ${message.startsWith("✅")
-                                        ? "text-green-600"
-                                        : "text-red-600"
+                                className={`mt-4 text-center text-sm ${message.startsWith("✅") ? "text-green-600" : "text-red-600"
                                     }`}
                             >
                                 {message}
                             </p>
                         )}
-
-                        <p className="mt-6 text-center text-sm">
-                            Bereits registriert?{" "}
-                            <button
-                                type="button"
-                                onClick={() => navigate("/login")}
-                                className="text-blue-600 hover:underline"
-                            >
-                                Zur&uuml;ck zum Login
-                            </button>
-                        </p>
                     </form>
+                </div>
+
+                {/* Sticky Footer für Mobile */}
+                <div className="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md py-4 text-center border-t border-gray-200 md:hidden">
+                    <p className="text-sm">
+                        Bereits registriert?{" "}
+                        <button
+                            type="button"
+                            onClick={() => navigate("/login")}
+                            className="text-blue-600 hover:underline"
+                        >
+                            Zur&uuml;ck zum Login
+                        </button>
+                    </p>
                 </div>
             </div>
         </Layout>
