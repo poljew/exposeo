@@ -1,11 +1,8 @@
 ﻿import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
-//import background from "/bg-dashboard.png";
 import Layout from "./components/Layout";
 import { generateExposeText } from "./ai/generateExposeText";
-
-
 
 const EditExpose = () => {
     const { id } = useParams();
@@ -74,48 +71,56 @@ const EditExpose = () => {
         setSaving(false);
     };
 
-    if (!form) return <p className="text-white">Lade Expos&eacute; ...</p>;
+    if (loading) return <p className="text-white text-center mt-10">Lade Exposé ...</p>;
+    if (!form) return null;
 
     return (
         <Layout>
             {saving && (
                 <div className="fixed inset-0 bg-white/70 z-50 flex items-center justify-center">
                     <div className="text-xl font-semibold text-blue-600 animate-pulse">
-                        Erstelle Expos&eacute; ...
+                        Erstelle Exposé ...
                     </div>
                 </div>
             )}
+
             <div
-                className="min-h-screen bg-no-repeat bg-cover bg-center flex items-center justify-center"
+                className="min-h-screen w-full bg-cover bg-center flex items-center justify-center px-4 sm:px-6 lg:px-8"
                 style={{ backgroundImage: `url(${background})` }}
             >
-                <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6 w-full">
+                <div className="w-full max-w-6xl bg-white/95 backdrop-blur-md shadow-md rounded-lg p-6 sm:p-8">
+
+                    {/* Zurück Button */}
                     <button
                         onClick={() => navigate(-1)}
                         className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zur&uuml;ck
+                        &larr; Zurück
                     </button>
+
                     <h2 className="text-2xl font-semibold mb-6">Exposé bearbeiten</h2>
 
                     <form onSubmit={(e) => { e.preventDefault(); saveForm(); }}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                            {/* Linke Spalte */}
                             <div className="space-y-4">
-                                <input type="text" name="adresse" className="w-full p-2 border rounded" value={form.adresse} onChange={handleChange} placeholder="Adresse" />
-                                <select name="immobilientyp" value={form.immobilientyp || "Haus"} onChange={handleChange} className="w-full p-2 border rounded">
+                                <input type="text" name="adresse" className="w-full p-3 border rounded-md" value={form.adresse} onChange={handleChange} placeholder="Adresse" />
+                                <select name="immobilientyp" value={form.immobilientyp || "Haus"} onChange={handleChange} className="w-full p-3 border rounded-md">
                                     <option value="Haus">Haus</option>
                                     <option value="Wohnung">Wohnung</option>
                                     <option value="Garage">Garage</option>
                                 </select>
-                                <input type="number" name="wohnflaeche" className="w-full p-2 border rounded" value={form.wohnflaeche} onChange={handleChange} placeholder="Wohnfläche (m²)" />
-                                <input type="number" name="grundstueck" className="w-full p-2 border rounded" value={form.grundstueck} onChange={handleChange} placeholder="Grundst&uuml;ck (m²)" />
-                                <input type="number" name="baujahr" className="w-full p-2 border rounded" value={form.baujahr} onChange={handleChange} placeholder="Baujahr" />
-                                <input type="number" name="zimmer" className="w-full p-2 border rounded" value={form.zimmer || ""} onChange={handleChange} placeholder="Zimmer" />
-                                <input type="text" name="energieausweis" className="w-full p-2 border rounded" value={form.energieausweis || ""} onChange={handleChange} placeholder="Energieausweis" />
-                                <input type="text" name="zustand" className="w-full p-2 border rounded" value={form.zustand || ""} onChange={handleChange} placeholder="Zustand" />
+                                <input type="number" name="wohnflaeche" className="w-full p-3 border rounded-md" value={form.wohnflaeche} onChange={handleChange} placeholder="Wohnfläche (m²)" />
+                                <input type="number" name="grundstueck" className="w-full p-3 border rounded-md" value={form.grundstueck} onChange={handleChange} placeholder="Grundstück (m²)" />
+                                <input type="number" name="baujahr" className="w-full p-3 border rounded-md" value={form.baujahr} onChange={handleChange} placeholder="Baujahr" />
+                                <input type="number" name="zimmer" className="w-full p-3 border rounded-md" value={form.zimmer || ""} onChange={handleChange} placeholder="Zimmer" />
+                                <input type="text" name="energieausweis" className="w-full p-3 border rounded-md" value={form.energieausweis || ""} onChange={handleChange} placeholder="Energieausweis" />
+                                <input type="text" name="zustand" className="w-full p-3 border rounded-md" value={form.zustand || ""} onChange={handleChange} placeholder="Zustand" />
 
+                                {/* Ausstattung */}
                                 <fieldset>
-                                    <legend className="font-semibold">Ausstattung</legend>
+                                    <legend className="font-semibold mb-1">Ausstattung</legend>
                                     {["Balkon", "Einbauküche", "Garage"].map((item) => (
                                         <label key={item} className="block">
                                             <input type="checkbox" name="ausstattung" value={item} checked={form.ausstattung?.includes(item)} onChange={handleChange} />
@@ -124,8 +129,9 @@ const EditExpose = () => {
                                     ))}
                                 </fieldset>
 
+                                {/* Zielgruppe */}
                                 <fieldset>
-                                    <legend className="font-semibold">Zielgruppe</legend>
+                                    <legend className="font-semibold mb-1">Zielgruppe</legend>
                                     {["Familie", "Kapitalanleger"].map((item) => (
                                         <label key={item} className="block">
                                             <input type="checkbox" name="zielgruppe" value={item} checked={form.zielgruppe?.includes(item)} onChange={handleChange} />
@@ -134,13 +140,14 @@ const EditExpose = () => {
                                     ))}
                                 </fieldset>
 
+                                {/* Tonfall */}
                                 <div>
                                     <label className="font-semibold block mb-1">Tonfall</label>
                                     <select
                                         name="tonfall"
                                         value={form.tonfall}
                                         onChange={handleChange}
-                                        className="w-full p-3 border rounded"
+                                        className="w-full p-3 border rounded-md"
                                     >
                                         <option value="sachlich">Sachlich</option>
                                         <option value="neutral">Neutral</option>
@@ -157,16 +164,18 @@ const EditExpose = () => {
                                             placeholder="z.B. humorvoll, charmant..."
                                             value={form.eigenerTonfall}
                                             onChange={handleChange}
-                                            className="mt-2 w-full p-2 border border-gray-300 rounded"
+                                            className="mt-2 w-full p-3 border rounded-md"
                                         />
                                     )}
                                 </div>
 
-                                <textarea name="besonderheiten" placeholder="Besonderheiten / Notizen" className="w-full p-2 border rounded" value={form.besonderheiten} onChange={handleChange} />
+                                <textarea name="besonderheiten" placeholder="Besonderheiten / Notizen" className="w-full p-3 border rounded-md" value={form.besonderheiten} onChange={handleChange} />
                             </div>
 
+                            {/* Rechte Spalte */}
                             <div className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
+                                {/* Bilder */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {form.bilder?.map((url, index) => (
                                         <img key={index} src={url} alt={`Bild ${index}`} className="w-full h-32 object-cover rounded" />
                                     ))}
@@ -175,6 +184,8 @@ const EditExpose = () => {
                                     💡 Du kannst Platzhalter wie <code>[BILD1]</code>, <code>[BILD2]</code> usw. im Text verwenden,
                                     um Bilder aus deiner Galerie an der gewünschten Stelle anzuzeigen.
                                 </div>
+
+                                {/* Textbereich */}
                                 <div>
                                     <label className="block text-gray-700 font-medium mb-2">Exposé-Text</label>
                                     <div className="flex gap-2 mb-2 flex-wrap">
@@ -195,7 +206,6 @@ const EditExpose = () => {
 
                                                         setForm({ ...form, text: newText });
 
-                                                        // Setze Cursor hinter den eingefügten Platzhalter
                                                         setTimeout(() => {
                                                             textarea.focus();
                                                             textarea.setSelectionRange(start + insert.length, start + insert.length);
@@ -217,13 +227,15 @@ const EditExpose = () => {
                                         className="w-full p-3 border border-gray-300 rounded-md"
                                     />
                                 </div>
+
+                                {/* Buttons */}
                                 <div className="flex flex-col gap-3 pt-4">
-                                    <button type="submit" className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700" disabled={saving}>
+                                    <button type="submit" className="w-full bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700" disabled={saving}>
                                         Speichern
                                     </button>
                                     <button
                                         type="button"
-                                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                                        className="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                                         onClick={() => saveForm(true)}
                                         disabled={saving}
                                     >
@@ -231,10 +243,10 @@ const EditExpose = () => {
                                     </button>
                                     <button
                                         type="button"
-                                        className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                                        className="w-full bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                                         onClick={() => navigate("/expose/list")}
                                     >
-                                        Zur&uuml;ck
+                                        Zurück
                                     </button>
                                 </div>
                             </div>
