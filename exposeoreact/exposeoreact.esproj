@@ -30,5 +30,6 @@
     <None Remove="frontend\public\Logo4_1.png" />
     <None Remove="frontend\public\react.svg" />
     <None Remove="frontend\public\vite.svg" />
+    <None Remove="frontend\server.js" />
   </ItemGroup>
 </Project>
