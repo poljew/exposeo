@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "build": "npm --prefix frontend run build"
+    "start": "node exposeoreact/server.js",
+    "build": "npm --prefix exposeoreact/frontend run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",

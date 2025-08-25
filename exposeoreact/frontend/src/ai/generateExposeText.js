@@ -1,4 +1,4 @@
-// src/ai/generateExposeText.js
+
 export const generateExposeText = async (form) => {
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // Vite: .env Variable
 
