@@ -7,7 +7,7 @@
     <PackageJsonScriptsDev Condition="$(PackageJsonScriptsDev) == ''">concurrently "npm run dev:server" "npm run dev:client"</PackageJsonScriptsDev>
     <PackageJsonScriptsDevServer Condition="$(PackageJsonScriptsDevServer) == ''">node server.js</PackageJsonScriptsDevServer>
     <PackageJsonScriptsDevClient Condition="$(PackageJsonScriptsDevClient) == ''">npm run dev --prefix frontend</PackageJsonScriptsDevClient>
-    <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">npm run build --prefix frontend</PackageJsonScriptsBuild>
+    <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">npm install --prefix frontend &amp;&amp; npm run build --prefix frontend</PackageJsonScriptsBuild>
     <PackageJsonScriptsStart Condition="$(PackageJsonScriptsStart) == ''">node server.js</PackageJsonScriptsStart>
     <PackageJsonDependenciesExpress Condition="$(PackageJsonDependenciesExpress) == ''">^4.19.2</PackageJsonDependenciesExpress>
     <PackageJsonDependenciesCors Condition="$(PackageJsonDependenciesCors) == ''">^2.8.5</PackageJsonDependenciesCors>
