@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardPage from "./DashboardPage";
-import NewExpose from "./NewExpose";
+import NewExpose  from "./NewExpose";
 import ExposeList from "./ExposeList";
 import ExposeDetail from "./ExposeDetail";
 import LoginPage from "./LoginPage";

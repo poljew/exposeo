@@ -4,7 +4,6 @@ import RegisterPage from "./RegisterPage";
 import Dashboard from "./DashboardPage";
 import ProtectedRoute from "./ProtectedRoute";
 import EditExpose from "./EditExpose";
-import ExposeDetail from "./ExposeDetail";
 import Settings from "./Settings";
 import Impressum from "./Impressum";
 import HomePage from "./HomePage"; 
@@ -34,7 +33,6 @@ export default function App() {
                     }
                 />
                 <Route path="/expose/edit/:id" element={<EditExpose />} />
-                <Route path="/expose/details/:id" element={<ExposeDetail />} />
                 <Route path="*" element={<HomePage />} /> {/* Fallback */}
             </Routes>
         </Router>

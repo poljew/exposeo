@@ -1,43 +1,159 @@
-﻿// src/ai/generateExposeText.js
-export const generateExposeText = async (form) => {
-    const prompt = `
-Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
-Hier sind die Eckdaten:
-- Adresse: ${form.adresse}
-- Wohnfläche: ${form.wohnflaeche} m²
-- Grundstück: ${form.grundstueck} m²
-- Baujahr: ${form.baujahr}
-- Immobilientyp: ${form.immobilientyp}
-- Zimmer: ${form.zimmer}
-- Zustand: ${form.zustand}
-- Energieausweis: ${form.energieausweis}
-- Ausstattung: ${form.ausstattung.join(", ")}
-- Besonderheiten: ${form.besonderheiten}
-- Zielgruppe: ${form.zielgruppe.join(", ")}
-- Preis: ${form.preis} EUR
+﻿import React, { useState } from "react";
+import { generateExposeText } from "./ai/generateExposeText";
 
-Bitte schreibe einen ansprechenden Exposé-Text.
-`;
+export default function NewExpose() {
+    const [form, setForm] = useState({
+        adresse: "",
+        wohnflaeche: "",
+        grundstueck: "",
+        baujahr: "",
+        immobilientyp: "",
+        zimmer: "",
+        zustand: "",
+        energieausweis: "",
+        ausstattung: [],
+        besonderheiten: "",
+        zielgruppe: [],
+        preis: "",
+        tonfall: "neutral"
+    });
 
-    try {
-        // Hier rufen wir jetzt unser eigenes Backend auf, nicht direkt OpenAI
-        const response = await fetch("/api/generate-text", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt }),
-        });
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState("");
+    const [error, setError] = useState("");
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Backend-Fehler: ${response.status} – ${errorText}`);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value });
+    };
+
+    const handleGenerate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        setResult("");
+
+        try {
+            const text = await generateExposeText(form);
+            setResult(text);
+        } catch (err) {
+            setError("Fehler beim Generieren: " + err.message);
+        } finally {
+            setLoading(false);
         }
+    };
 
-        const data = await response.json();
-        return data.result.trim();
-    } catch (err) {
-        console.error("Fehler bei generateExposeText:", err);
-        throw err;
-    }
-};
+    return (
+        <div style={{ maxWidth: "600px", margin: "2rem auto", fontFamily: "sans-serif" }}>
+            <h1>Neues Exposé erstellen</h1>
+            <form onSubmit={handleGenerate} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <input
+                    type="text"
+                    name="adresse"
+                    placeholder="Adresse"
+                    value={form.adresse}
+                    onChange={handleChange}
+                    required
+                />
+                <input
+                    type="number"
+                    name="wohnflaeche"
+                    placeholder="Wohnfläche (m²)"
+                    value={form.wohnflaeche}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="grundstueck"
+                    placeholder="Grundstück (m²)"
+                    value={form.grundstueck}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="baujahr"
+                    placeholder="Baujahr"
+                    value={form.baujahr}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="immobilientyp"
+                    placeholder="Immobilientyp"
+                    value={form.immobilientyp}
+                    onChange={handleChange}
+                />
+                <input
+                    type="number"
+                    name="zimmer"
+                    placeholder="Zimmer"
+                    value={form.zimmer}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="zustand"
+                    placeholder="Zustand"
+                    value={form.zustand}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="energieausweis"
+                    placeholder="Energieausweis"
+                    value={form.energieausweis}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="ausstattung"
+                    placeholder="Ausstattung (kommagetrennt)"
+                    value={form.ausstattung}
+                    onChange={(e) => setForm({ ...form, ausstattung: e.target.value.split(",") })}
+                />
+                <input
+                    type="text"
+                    name="besonderheiten"
+                    placeholder="Besonderheiten"
+                    value={form.besonderheiten}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="zielgruppe"
+                    placeholder="Zielgruppe (kommagetrennt)"
+                    value={form.zielgruppe}
+                    onChange={(e) => setForm({ ...form, zielgruppe: e.target.value.split(",") })}
+                />
+                <input
+                    type="number"
+                    name="preis"
+                    placeholder="Preis (€)"
+                    value={form.preis}
+                    onChange={handleChange}
+                />
+                <select
+                    name="tonfall"
+                    value={form.tonfall}
+                    onChange={handleChange}
+                >
+                    <option value="neutral">Neutral</option>
+                    <option value="freundlich">Freundlich</option>
+                    <option value="luxuriös">Luxuriös</option>
+                    <option value="professionell">Professionell</option>
+                </select>
+                <button type="submit" disabled={loading}>
+                    {loading ? "Generiere..." : "Exposé generieren"}
+                </button>
+            </form>
+
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            {result && (
+                <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ccc" }}>
+                    <h2>Generiertes Exposé</h2>
+                    <pre style={{ whiteSpace: "pre-wrap" }}>{result}</pre>
+                </div>
+            )}
+        </div>
+    );
+}
