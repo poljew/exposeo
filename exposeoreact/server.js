@@ -1,18 +1,17 @@
-//import express from "express";
-//import fetch from "node-fetch"; // Falls du Node <18 nutzt, sonst global verfügbar
-//import dotenv from "dotenv";
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const path = require("path");
-const { fileURLToPath } = require("url");
-const fetch = require("node-fetch");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import fetch from "node-fetch";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
+// Pfade für __dirname / __filename definieren (weil ESM)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -44,7 +43,7 @@ Bitte schreibe einen ansprechenden Exposé-Text.
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.VITE_OPENAI_API_KEY}`,
+                Authorization: `Bearer ${process.env.VITE_OPENAI_API_KEY}`
             },
             body: JSON.stringify({
                 model: "gpt-4o-mini",
@@ -63,11 +62,11 @@ Bitte schreibe einen ansprechenden Exposé-Text.
 // Statische Dateien ausliefern (Frontend Build)
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-// Alle unbekannten Routen -> index.html (React Router)
+// Alle unbekannten Routen -> index.html (für React Router)
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
 });
 
 // Port dynamisch (Render) oder 5000 lokal
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server l&auml;uft auf Port ${PORT}`));
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
