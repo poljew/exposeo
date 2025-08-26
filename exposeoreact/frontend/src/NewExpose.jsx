@@ -289,6 +289,7 @@ export default function NewExpose() {
                                     <option value="neutral">Neutral</option>
                                     <option value="freundlich">Freundlich</option>
                                     <option value="professionell">Professionell</option>
+                                    <option value="luxuriös">Luxuriös</option>
                                     <option value="emotional">Emotional</option>
                                     <option value="locker">Locker</option>
                                     <option value="eigener">Eigener</option>

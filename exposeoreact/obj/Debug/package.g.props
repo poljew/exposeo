@@ -9,9 +9,9 @@
     <PackageJsonScriptsDevClient Condition="$(PackageJsonScriptsDevClient) == ''">npm run dev --prefix frontend</PackageJsonScriptsDevClient>
     <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">npm install --prefix frontend &amp;&amp; npm run build --prefix frontend</PackageJsonScriptsBuild>
     <PackageJsonScriptsStart Condition="$(PackageJsonScriptsStart) == ''">node server.js</PackageJsonScriptsStart>
-    <PackageJsonDependenciesExpress Condition="$(PackageJsonDependenciesExpress) == ''">^4.19.2</PackageJsonDependenciesExpress>
+    <PackageJsonDependenciesExpress Condition="$(PackageJsonDependenciesExpress) == ''">^4.18.2</PackageJsonDependenciesExpress>
     <PackageJsonDependenciesCors Condition="$(PackageJsonDependenciesCors) == ''">^2.8.5</PackageJsonDependenciesCors>
-    <PackageJsonDependenciesDotenv Condition="$(PackageJsonDependenciesDotenv) == ''">^16.4.5</PackageJsonDependenciesDotenv>
+    <PackageJsonDependenciesDotenv Condition="$(PackageJsonDependenciesDotenv) == ''">^16.3.1</PackageJsonDependenciesDotenv>
     <PackageJsonDevdependenciesConcurrently Condition="$(PackageJsonDevdependenciesConcurrently) == ''">^8.2.2</PackageJsonDevdependenciesConcurrently>
   </PropertyGroup>
 </Project>
