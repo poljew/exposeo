@@ -15,11 +15,14 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+});
 // Route für Text-Generierung
-app.post("/api/generate-expose", async (req, res) => {
+app.post("/api/generate-text", async (req, res) => {
     try {
         const { form } = req.body;
-
+       
         const prompt = `
 Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
 Hier sind die Eckdaten:
@@ -52,10 +55,16 @@ Bitte schreibe einen ansprechenden Exposé-Text.
         });
 
         const result = await response.json();
+        
+
+        if (!result.choices || !result.choices[0]?.message?.content) {
+            throw new Error("Ungültige API-Antwort");
+        }
+
         res.json({ text: result.choices[0].message.content.trim() });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Fehler bei der Exposé-Erstellung" });
+        res.status(500).json({ error: "Fehler bei der Expose-Erstellung" });
     }
 });
 

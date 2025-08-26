@@ -1,13 +1,12 @@
+// src/ai/generateExposeText.js
 
 export const generateExposeText = async (form) => {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // Vite: .env Variable
-
     const prompt = `
 Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
 Hier sind die Eckdaten:
 - Adresse: ${form.adresse}
-- Wohnfläche: ${form.wohnflaeche} m&sup2;
-- Grundstück: ${form.grundstueck} m&sup2;
+- Wohnfläche: ${form.wohnflaeche} m²
+- Grundstück: ${form.grundstueck} m²
 - Baujahr: ${form.baujahr}
 - Immobilientyp: ${form.immobilientyp}
 - Zimmer: ${form.zimmer}
@@ -21,28 +20,30 @@ Hier sind die Eckdaten:
 Bitte schreibe einen ansprechenden Exposé-Text.
 `;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-            model: "gpt-4", //  fallback unten, falls kein Zugriff
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-        }),
-    });
+    try {
+        // Basis-URL: in Dev lokal, in Prod relativ (Render/Express liefert API)
+        const baseUrl =
+            import.meta.env.MODE === "development"
+                ? "http://localhost:5000" // dein Backend lokal
+                : "";
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`OpenAI API-Fehler: ${response.status} – ${errorText}`);
+        const response = await fetch(`${baseUrl}/api/generate-text`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ form }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Backend-Fehler: ${response.status} – ${errorText}`);
+        }
+
+        const data = await response.json();
+        return data.text.trim();
+    } catch (err) {
+        console.error("Fehler bei generateExposeText:", err);
+        throw err;
     }
-
-    const result = await response.json();
-    return result.choices[0].message.content.trim();
 };
