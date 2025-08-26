@@ -25,7 +25,7 @@ Bitte schreibe einen ansprechenden Exposé-Text.
         const baseUrl =
             import.meta.env.MODE === "development"
                 ? "http://localhost:5000" // dein Backend lokal
-                : "";
+                : "https://api-exposeo.onrender.com";
 
         const response = await fetch(`${baseUrl}/api/generate-text`, {
             method: "POST",
