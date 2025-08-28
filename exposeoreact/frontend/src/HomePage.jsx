@@ -22,6 +22,9 @@ const HomePage = () => {
                             Mit ExposéO erstellen Sie hochwertige Immobilien-Exposés in wenigen Minuten – automatisch,
                             stilvoll und auf Knopfdruck.
                         </p>
+                        <p className="text-base sm:text-lg mb-8 font-medium">
+                            In der Testphase nutzen Sie ausschließlich unser Free-Modell – und können unbegrenzt viele Exposés erstellen.
+                        </p>
                         <Link
                             to="/register"
                             className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-6 rounded transition"

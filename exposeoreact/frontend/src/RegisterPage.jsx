@@ -82,7 +82,7 @@ export default function RegisterPage() {
                             <span>
                                 Ich habe die{" "}
                                 <a
-                                    href="/Nutzungsbedienungen.pdf"
+                                    href="/Nutzungsbedingungen.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-600 hover:underline"
