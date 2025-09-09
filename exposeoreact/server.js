@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import fetch from "node-fetch";
-import { useLanguage } from "./LanguageContext.jsx";
+import { translations } from "./translations.js";
 
 dotenv.config();
 
@@ -12,10 +12,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 // Pfade für __dirname / __filename definieren (weil ESM)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const { t } = useLanguage();
+const { t } = translations();
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
