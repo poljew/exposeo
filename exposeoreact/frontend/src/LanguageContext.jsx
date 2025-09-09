@@ -1,6 +1,5 @@
 ﻿import React, { createContext, useState, useContext, useEffect } from "react";
 import { translations } from "./translations";
-import ReactCountryFlag from "react-country-flag";
 
 const LanguageContext = createContext();
 
