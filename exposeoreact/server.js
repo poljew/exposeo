@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import fetch from "node-fetch";
-import { translations } from "../translations.js";
+import { translations } from "./translations.js";
 
 dotenv.config();
 
