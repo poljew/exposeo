@@ -21,13 +21,13 @@ app.get("/api/health", (req, res) => {
 // Route für Text-Generierung
 app.post("/api/generate-text", async (req, res) => {
     try {
-
+        const { form } = req.body;
         const translatedAusstattung = form.ausstattung.map(a => t.ausstattung_options[a] || a);
         const translatedZustand = t.zustand_options[form.zustand] || form.zustand;
         const translatedZielgruppe = form.zielgruppe.map(z => t.zielgruppe_options[z] || z);
         const translatedImmobilientyp = Array.isArray(form.immobilientyp)
-            ? form.immobilientyp.map(i => t.immobilientyp_options[i] || i).join(", ")
-            : t.immobilientyp_options[form.immobilientyp] || form.immobilientyp;
+        ? form.immobilientyp.map(i => t.immobilientyp_options[i] || i).join(", ")
+        : t.immobilientyp_options[form.immobilientyp] || form.immobilientyp;
 
 
         const prompt = `
@@ -48,7 +48,7 @@ ${t.prompt_part_1} ${form.tonfall} ${t.prompt_part_5} ${t.given_language}. ${t.p
 ${t.prompt_part_2} ${form.adresse} ${t.prompt_part_3} ${form.adresse}.
 ${t.prompt_part_6} ${t.given_language}. 
 `;
-//        const { form } = req.body;
+        
        
 //        const prompt = `
 //Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
