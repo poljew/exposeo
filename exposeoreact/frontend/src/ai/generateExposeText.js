@@ -25,8 +25,8 @@ ${t.prompt_part_1} ${form.tonfall} ${t.prompt_part_5} ${t.given_language}. ${t.p
 ${t.prompt_part_2} ${form.adresse} ${t.prompt_part_3} ${form.adresse}.
 ${t.prompt_part_6} ${t.given_language}. 
 `;
-    console.log(prompt);
-    console.log(t.given_language);
+    //console.log(prompt);
+    //console.log(t.given_language);
 
     try {
         

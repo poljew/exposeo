@@ -21,26 +21,53 @@ app.get("/api/health", (req, res) => {
 // Route für Text-Generierung
 app.post("/api/generate-text", async (req, res) => {
     try {
-        const { form } = req.body;
-       
-        const prompt = `
-Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
-Hier sind die Eckdaten:
-- Adresse: ${form.adresse}
-- Wohnfläche: ${form.wohnflaeche} m²
-- Grundstück: ${form.grundstueck} m²
-- Baujahr: ${form.baujahr}
-- Immobilientyp: ${form.immobilientyp}
-- Zimmer: ${form.zimmer}
-- Zustand: ${form.zustand}
-- Energieausweis: ${form.energieausweis}
-- Ausstattung: ${form.ausstattung.join(", ")}
-- Besonderheiten: ${form.besonderheiten}
-- Zielgruppe: ${form.zielgruppe.join(", ")}
-- Preis: ${form.preis} EUR
 
-Bitte schreibe einen ansprechenden Exposé-Text.
+        const translatedAusstattung = form.ausstattung.map(a => t.ausstattung_options[a] || a);
+        const translatedZustand = t.zustand_options[form.zustand] || form.zustand;
+        const translatedZielgruppe = form.zielgruppe.map(z => t.zielgruppe_options[z] || z);
+        const translatedImmobilientyp = Array.isArray(form.immobilientyp)
+            ? form.immobilientyp.map(i => t.immobilientyp_options[i] || i).join(", ")
+            : t.immobilientyp_options[form.immobilientyp] || form.immobilientyp;
+
+
+        const prompt = `
+${t.prompt_part_1} ${form.tonfall} ${t.prompt_part_5} ${t.given_language}. ${t.prompt_part_4}:
+- ${t.adresse}: ${form.adresse}
+- ${t.wohnflaeche}: ${form.wohnflaeche} m²
+- ${t.grundstueck}: ${form.grundstueck} m²
+- ${t.baujahr}: ${form.baujahr}
+- ${t.immobilientyp_label}: ${translatedImmobilientyp}
+- ${t.zimmer}: ${form.zimmer}
+- ${t.zustand}: ${translatedZustand}
+- ${t.energieausweis}: ${form.energieausweis}
+- ${t.ausstattung}: ${translatedAusstattung.join(", ")}
+- ${t.besonderheiten}: ${form.besonderheiten}
+- ${t.zielgruppe}: ${translatedZielgruppe.join(", ")}
+- ${t.preis}: ${form.preis} EUR
+
+${t.prompt_part_2} ${form.adresse} ${t.prompt_part_3} ${form.adresse}.
+${t.prompt_part_6} ${t.given_language}. 
 `;
+//        const { form } = req.body;
+       
+//        const prompt = `
+//Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
+//Hier sind die Eckdaten:
+//- Adresse: ${form.adresse}
+//- Wohnfläche: ${form.wohnflaeche} m²
+//- Grundstück: ${form.grundstueck} m²
+//- Baujahr: ${form.baujahr}
+//- Immobilientyp: ${form.immobilientyp}
+//- Zimmer: ${form.zimmer}
+//- Zustand: ${form.zustand}
+//- Energieausweis: ${form.energieausweis}
+//- Ausstattung: ${form.ausstattung.join(", ")}
+//- Besonderheiten: ${form.besonderheiten}
+//- Zielgruppe: ${form.zielgruppe.join(", ")}
+//- Preis: ${form.preis} EUR
+
+//Bitte schreibe einen ansprechenden Exposé-Text.
+//`;
 
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
@@ -50,9 +77,12 @@ Bitte schreibe einen ansprechenden Exposé-Text.
             },
             body: JSON.stringify({
                 model: "gpt-4o",
-                messages: [{ role: "user", content: prompt }],
-            }),
+                messages: [{ role: "user", content: prompt }]
+            })
         });
+
+        console.log(prompt);
+        console.log(t.given_language);
 
         const result = await response.json();
         
