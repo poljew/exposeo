@@ -2,14 +2,14 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext.jsx";
 
-export default function RegisterPage() {
+export default function RegisterPage() {    
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // ✅ Neue States für Checkboxen
     const [termsChecked, setTermsChecked] = useState(false);
     const [privacyChecked, setPrivacyChecked] = useState(false);
 
@@ -29,16 +29,15 @@ export default function RegisterPage() {
         setLoading(false);
 
         if (error) {
-            setMessage("X " + error.message);
+            setMessage(t.register_message_error_prefix + error.message);
         } else {
-            setMessage("✅ Registrierungslink wurde an deine E-Mail gesendet.");
+            setMessage(t.register_message_sent);
             setTimeout(() => {
                 navigate("/login");
             }, 3000);
         }
     };
-
-    // Button nur aktiv, wenn beide Checkboxen true sind
+    const { t } = useLanguage();
     const canRegister = termsChecked && privacyChecked && !loading;
 
     return (
@@ -50,13 +49,13 @@ export default function RegisterPage() {
                 <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-xl shadow-lg w-full max-w-md">
                     <form onSubmit={handleRegister} className="w-full">
                         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-                            Registrieren
+                            {t.register_title}
                         </h2>
 
                         <input
                             type="email"
                             className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                            placeholder="E-Mail"
+                            placeholder={t.register_email_placeholder}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -65,13 +64,13 @@ export default function RegisterPage() {
                         <input
                             type="password"
                             className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-                            placeholder="Passwort"
+                            placeholder={t.register_password_placeholder}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
 
-                        {/* ✅ Checkbox Nutzungsbedingungen */}
+                        
                         <label className="flex items-start mb-2 text-sm">
                             <input
                                 type="checkbox"
@@ -80,20 +79,20 @@ export default function RegisterPage() {
                                 className="mt-1 mr-2"
                             />
                             <span>
-                                Ich habe die{" "}
+                                {t.register_terms_text}{" "}
                                 <a
                                     href="/Nutzungsbedingungen.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-600 hover:underline"
                                 >
-                                    Nutzungsbedingungen
+                                    {t.register_terms_link}
                                 </a>{" "}
-                                gelesen und akzeptiere sie.
+                                {t.register_terms_text2}
                             </span>
                         </label>
 
-                        {/* ✅ Checkbox Datenschutz */}
+                        
                         <label className="flex items-start mb-4 text-sm">
                             <input
                                 type="checkbox"
@@ -102,16 +101,16 @@ export default function RegisterPage() {
                                 className="mt-1 mr-2"
                             />
                             <span>
-                                Ich habe die{" "}
+                                {t.register_privacy_text}{" "}
                                 <a
                                     href="/Datenschutzerklaerung.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-600 hover:underline"
                                 >
-                                    Datenschutzerklärung
+                                    {t.register_privacy_link}
                                 </a>{" "}
-                                gelesen und akzeptiere sie.
+                                {t.register_privacy_text2}
                             </span>
                         </label>
 
@@ -123,14 +122,12 @@ export default function RegisterPage() {
                                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                                 }`}
                         >
-                            {loading ? "Registrieren..." : "Registrieren"}
+                            {loading ? t.register_button_loading : t.register_button}
                         </button>
 
                         {message && (
                             <p
-                                className={`mt-4 text-center text-sm ${message.startsWith("✅")
-                                        ? "text-green-600"
-                                        : "text-red-600"
+                                className={`mt-4 text-center text-sm ${message.startsWith("✅") ? "text-green-600" : "text-red-600"
                                     }`}
                             >
                                 {message}
@@ -138,13 +135,13 @@ export default function RegisterPage() {
                         )}
 
                         <p className="mt-6 text-center text-sm">
-                            Bereits registriert?{" "}
+                            {t.register_login_prompt}{" "}
                             <button
                                 type="button"
                                 onClick={() => navigate("/login")}
                                 className="text-blue-600 hover:underline"
                             >
-                                Zur&uuml;ck zum Login
+                                {t.register_login_button}
                             </button>
                         </p>
                     </form>

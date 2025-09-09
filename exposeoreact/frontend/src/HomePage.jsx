@@ -1,10 +1,13 @@
 ﻿import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext.jsx";
 
 const background = "/assets/BG_home2.png";
 
 const HomePage = () => {
+    const { t } = useLanguage();   
+
     return (
         <Layout>
             <div
@@ -15,41 +18,36 @@ const HomePage = () => {
 
                     {/* Hero-Bereich */}
                     <div className="max-w-3xl text-center">
-                        <h1 className="text-3xl sm:text-4xl font-bold mb-6">
-                            Willkommen bei ExposéO
-                        </h1>
+                        <h1 className="text-3xl sm:text-4xl font-bold mb-6">{t.home_welcome}</h1>
                         <p className="text-base sm:text-lg mb-8 font-medium text-gray-600">
-                            Mit ExposéO erstellen Sie hochwertige Immobilien-Exposés in wenigen Minuten – automatisch,
-                            stilvoll und auf Knopfdruck.
+                            {t.home_description1}
                         </p>
-                        <p className="text-base sm:text-lg mb-8 font-medium">
-                            In der Testphase nutzen Sie ausschließlich unser Free-Modell – und können unbegrenzt viele Exposés erstellen.
-                        </p>
+                        <p className="text-base sm:text-lg mb-8 font-medium">{t.home_description2}</p>
                         <Link
                             to="/register"
                             className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-6 rounded transition"
                         >
-                            Jetzt kostenlos starten
+                            {t.home_start}
                         </Link>
                     </div>
 
                     {/* Tarife */}
                     <div className="mt-16 w-full">
-                        <h2 className="text-2xl font-bold mb-6 text-center">Unsere Tarife</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-center">{t.home_plans}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="bg-white p-6 rounded-lg shadow">
-                                <h3 className="text-xl font-bold mb-2">Free</h3>
-                                <p className="mb-2">Bis zu 3 Exposés pro Monat</p>
+                                <h3 className="text-xl font-bold mb-2">{t.home_free}</h3>
+                                <p className="mb-2">{t.home_freeDesc}</p>
                                 <p className="text-gray-500">0 EUR/Monat</p>
                             </div>
                             <div className="bg-white p-6 rounded-lg shadow">
-                                <h3 className="text-xl font-bold mb-2">Plus</h3>
-                                <p className="mb-2">Bis zu 20 Exposés pro Monat</p>
+                                <h3 className="text-xl font-bold mb-2">{t.home_plus}</h3>
+                                <p className="mb-2">{t.home_plusDesc}</p>
                                 <p className="text-gray-500">29 EUR/Monat</p>
                             </div>
                             <div className="bg-white p-6 rounded-lg shadow">
-                                <h3 className="text-xl font-bold mb-2">Premium</h3>
-                                <p className="mb-2">Bis zu 100 Exposés + Individualisierung</p>
+                                <h3 className="text-xl font-bold mb-2">{t.home_premium}</h3>
+                                <p className="mb-2">{t.home_premiumDesc}</p>
                                 <p className="text-gray-500">100 EUR/Monat</p>
                             </div>
                         </div>
@@ -58,7 +56,7 @@ const HomePage = () => {
                     {/* Footer */}
                     <footer className="mt-20 text-sm text-gray-500 text-center">
                         <Link to="/impressum" className="underline mr-4">
-                            Impressum
+                            {t.home_impressum}
                         </Link>
                     </footer>
                 </div>

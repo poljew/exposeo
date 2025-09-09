@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext.jsx";
 
 export default function LoginPage() {
+    const { t } = useLanguage();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
@@ -49,13 +51,13 @@ export default function LoginPage() {
                 <div className="bg-white/90 backdrop-blur-md rounded-xl w-full max-w-sm sm:max-w-md p-6 sm:p-8 shadow-lg">
                     <form onSubmit={handleLogin} className="flex flex-col gap-4">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
-                            Login
+                            {t.login_title}
                         </h2>
 
                         <input
                             type="email"
                             className="w-full p-2 border rounded"
-                            placeholder="E-Mail"
+                            placeholder={t.login_email_placeholder}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -64,7 +66,7 @@ export default function LoginPage() {
                         <input
                             type="password"
                             className="w-full p-2 border rounded"
-                            placeholder="Passwort"
+                            placeholder={t.login_password_placeholder}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -75,7 +77,7 @@ export default function LoginPage() {
                             disabled={loading}
                             className="w-full bg-cyan-600 text-white py-2 rounded hover:bg-cyan-700 transition"
                         >
-                            {loading ? "Anmelden..." : "Login"}
+                            {loading ? t.login_button_loading : t.login_button}
                         </button>
 
                         {errorMsg && (
@@ -83,13 +85,13 @@ export default function LoginPage() {
                         )}
 
                         <p className="text-center text-sm">
-                            Noch kein Konto?{" "}
+                            {t.login_register_prompt}{" "}
                             <button
                                 type="button"
                                 onClick={() => navigate("/register")}
                                 className="text-blue-600 hover:underline"
                             >
-                                Jetzt registrieren
+                                {t.login_register_button}
                             </button>
                         </p>
                     </form>
