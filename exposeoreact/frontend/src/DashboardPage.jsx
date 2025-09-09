@@ -2,16 +2,18 @@
 import { useNavigate } from "react-router-dom";
 import { LogOut, PlusCircle, Settings, List } from "lucide-react";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext.jsx";
 
 const DashboardPage = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const background = "/assets/BG_home2.png";
 
     const actions = [
-        { label: "Neues Exposé", icon: <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/expose/new") },
-        { label: "Meine Exposés", icon: <List className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/expose/list") },
-        { label: "Einstellungen", icon: <Settings className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/settings") },
-        { label: "Logout", icon: <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => { localStorage.clear(); navigate("/login"); } }
+        { label: t.dashboard_newExpose, icon: <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/expose/new") },
+        { label: t.dashboard_myExposes, icon: <List className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/expose/list") },
+        { label: t.dashboard_settings, icon: <Settings className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => navigate("/settings") },
+        { label: t.dashboard_logout, icon: <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />, onClick: () => { localStorage.clear(); navigate("/login"); } }
     ];
 
     return (
@@ -23,7 +25,7 @@ const DashboardPage = () => {
                 <div className="bg-white/90 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-xl w-full max-w-sm sm:max-w-md text-center">
 
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">
-                        Willkommen zurück
+                        {t.dashboard_welcome}
                     </h1>
 
                     <div className="flex flex-col gap-4">

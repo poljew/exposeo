@@ -3,8 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
 import { generateExposeText } from "./ai/generateExposeText";
+import { useLanguage } from "./LanguageContext.jsx";
 
 const EditExpose = () => {
+    const { t } = useLanguage();
     const { id } = useParams();
     const navigate = useNavigate();
     const [form, setForm] = useState(null);
@@ -52,7 +54,7 @@ const EditExpose = () => {
         let updatedData = { ...form };
 
         if (generate) {
-            const newText = await generateExposeText(form);
+            const newText = await generateExposeText(form, t);
             updatedData.text = newText;
         }
 
@@ -62,16 +64,16 @@ const EditExpose = () => {
             .eq("id", id);
 
         if (error) {
-            alert("Fehler beim Speichern: " + error.message);
+            alert(t.edit_save_error + error.message);
         } else {
-            alert(generate ? "Text wurde neu generiert." : "Änderungen gespeichert.");
+            alert(generate ? t.edit_regenerate_success : t.edit_save_success);
             navigate("/expose/" + id);
         }
 
         setSaving(false);
     };
 
-    if (loading) return <p className="text-white text-center mt-10">Lade Exposé ...</p>;
+    if (loading) return <p className="text-white text-center mt-10">{t.edit_loading}</p>;
     if (!form) return null;
 
     return (
@@ -79,7 +81,7 @@ const EditExpose = () => {
             {saving && (
                 <div className="fixed inset-0 bg-white/70 z-50 flex items-center justify-center">
                     <div className="text-xl font-semibold text-blue-600 animate-pulse">
-                        Erstelle Exposé ...
+                        {t.edit_saving}
                     </div>
                 </div>
             )}
@@ -95,33 +97,33 @@ const EditExpose = () => {
                         onClick={() => navigate(-1)}
                         className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zurück
+                        &larr; {t.edit_back}
                     </button>
 
-                    <h2 className="text-2xl font-semibold mb-6">Exposé bearbeiten</h2>
+                    <h2 className="text-2xl font-semibold mb-6">{t.edit_title}</h2>
 
                     <form onSubmit={(e) => { e.preventDefault(); saveForm(); }}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                             {/* Linke Spalte */}
                             <div className="space-y-4">
-                                <input type="text" name="adresse" className="w-full p-3 border rounded-md" value={form.adresse} onChange={handleChange} placeholder="Adresse" />
-                                <select name="immobilientyp" value={form.immobilientyp || "Haus"} onChange={handleChange} className="w-full p-3 border rounded-md">
-                                    <option value="Haus">Haus</option>
-                                    <option value="Wohnung">Wohnung</option>
-                                    <option value="Garage">Garage</option>
+                                <input type="text" name="adresse" className="w-full p-3 border rounded-md" value={form.adresse} onChange={handleChange} placeholder={t.edit_address} />
+                                <select name="immobilientyp" value={form.immobilientyp || t.edit_type} onChange={handleChange} className="w-full p-3 border rounded-md">
+                                    <option value="Haus">{t.edit_type_house}</option>
+                                    <option value="Wohnung">{t.edit_type_apartment}</option>
+                                    <option value="Garage">{t.edit_type_garage}</option>
                                 </select>
-                                <input type="number" name="wohnflaeche" className="w-full p-3 border rounded-md" value={form.wohnflaeche} onChange={handleChange} placeholder="Wohnfläche (m²)" />
-                                <input type="number" name="grundstueck" className="w-full p-3 border rounded-md" value={form.grundstueck} onChange={handleChange} placeholder="Grundstück (m²)" />
-                                <input type="number" name="baujahr" className="w-full p-3 border rounded-md" value={form.baujahr} onChange={handleChange} placeholder="Baujahr" />
-                                <input type="number" name="zimmer" className="w-full p-3 border rounded-md" value={form.zimmer || ""} onChange={handleChange} placeholder="Zimmer" />
-                                <input type="text" name="energieausweis" className="w-full p-3 border rounded-md" value={form.energieausweis || ""} onChange={handleChange} placeholder="Energieausweis" />
-                                <input type="text" name="zustand" className="w-full p-3 border rounded-md" value={form.zustand || ""} onChange={handleChange} placeholder="Zustand" />
+                                <input type="number" name="wohnflaeche" className="w-full p-3 border rounded-md" value={form.wohnflaeche} onChange={handleChange} placeholder={t.edit_living_area} />
+                                <input type="number" name="grundstueck" className="w-full p-3 border rounded-md" value={form.grundstueck} onChange={handleChange} placeholder={t.edit_plot} />
+                                <input type="number" name="baujahr" className="w-full p-3 border rounded-md" value={form.baujahr} onChange={handleChange} placeholder={t.edit_year} />
+                                <input type="number" name="zimmer" className="w-full p-3 border rounded-md" value={form.zimmer || ""} onChange={handleChange} placeholder={t.edit_rooms} />
+                                <input type="text" name="energieausweis" className="w-full p-3 border rounded-md" value={form.energieausweis || ""} onChange={handleChange} placeholder={t.edit_energy} />
+                                <input type="text" name="zustand" className="w-full p-3 border rounded-md" value={form.zustand || ""} onChange={handleChange} placeholder={t.edit_condition} />
 
                                 {/* Ausstattung */}
                                 <fieldset>
-                                    <legend className="font-semibold mb-1">Ausstattung</legend>
-                                    {["Balkon", "Einbauküche", "Garage"].map((item) => (
+                                    <legend className="font-semibold mb-1">{t.edit_equipment}</legend>
+                                    {[t.edit_balcony, t.edit_kitchen, t.edit_garage].map((item) => (
                                         <label key={item} className="block">
                                             <input type="checkbox" name="ausstattung" value={item} checked={form.ausstattung?.includes(item)} onChange={handleChange} />
                                             {" " + item}
@@ -131,8 +133,8 @@ const EditExpose = () => {
 
                                 {/* Zielgruppe */}
                                 <fieldset>
-                                    <legend className="font-semibold mb-1">Zielgruppe</legend>
-                                    {["Familie", "Kapitalanleger"].map((item) => (
+                                    <legend className="font-semibold mb-1">{t.edit_target_group}</legend>
+                                    {[t.edit_family, t.edit_investors].map((item) => (
                                         <label key={item} className="block">
                                             <input type="checkbox" name="zielgruppe" value={item} checked={form.zielgruppe?.includes(item)} onChange={handleChange} />
                                             {" " + item}
@@ -142,26 +144,26 @@ const EditExpose = () => {
 
                                 {/* Tonfall */}
                                 <div>
-                                    <label className="font-semibold block mb-1">Tonfall</label>
+                                    <label className="font-semibold block mb-1">{t.edit_tone}</label>
                                     <select
                                         name="tonfall"
                                         value={form.tonfall}
                                         onChange={handleChange}
                                         className="w-full p-3 border rounded-md"
                                     >
-                                        <option value="sachlich">Sachlich</option>
-                                        <option value="neutral">Neutral</option>
-                                        <option value="freundlich">Freundlich</option>
-                                        <option value="professionell">Professionell</option>
-                                        <option value="emotional">Emotional</option>
-                                        <option value="locker">Locker</option>
-                                        <option value="eigener">Eigener</option>
+                                        <option value="sachlich">{t.edit_tone_options.sachlich}</option>
+                                        <option value="neutral">{t.edit_tone_options.neutral}</option>
+                                        <option value="freundlich">{t.edit_tone_options.freundlich}</option>
+                                        <option value="professionell">{t.edit_tone_options.professionell}</option>
+                                        <option value="emotional">{t.edit_tone_options.emotional}</option>
+                                        <option value="locker">{t.edit_tone_options.locker}</option>
+                                        <option value="eigener">{t.edit_tone_options.eigener}</option>
                                     </select>
                                     {form.tonfall === "eigener" && (
                                         <input
                                             type="text"
                                             name="eigenerTonfall"
-                                            placeholder="z.B. humorvoll, charmant..."
+                                            placeholder={t.edit_tone_custom}
                                             value={form.eigenerTonfall}
                                             onChange={handleChange}
                                             className="mt-2 w-full p-3 border rounded-md"
@@ -169,7 +171,7 @@ const EditExpose = () => {
                                     )}
                                 </div>
 
-                                <textarea name="besonderheiten" placeholder="Besonderheiten / Notizen" className="w-full p-3 border rounded-md" value={form.besonderheiten} onChange={handleChange} />
+                                <textarea name="besonderheiten" placeholder={t.edit_notes} className="w-full p-3 border rounded-md" value={form.besonderheiten} onChange={handleChange} />
                             </div>
 
                             {/* Rechte Spalte */}
@@ -181,13 +183,12 @@ const EditExpose = () => {
                                     ))}
                                 </div>
                                 <div className="text-sm text-gray-600 mt-1">
-                                    💡 Du kannst Platzhalter wie <code>[BILD1]</code>, <code>[BILD2]</code> usw. im Text verwenden,
-                                    um Bilder aus deiner Galerie an der gewünschten Stelle anzuzeigen.
+                                    {t.edit_images_hint}
                                 </div>
 
                                 {/* Textbereich */}
                                 <div>
-                                    <label className="block text-gray-700 font-medium mb-2">Exposé-Text</label>
+                                    <label className="block text-gray-700 font-medium mb-2">{t.edit_text_label}</label>
                                     <div className="flex gap-2 mb-2 flex-wrap">
                                         {form.bilder?.map((_, i) => (
                                             <button
@@ -223,7 +224,7 @@ const EditExpose = () => {
                                         value={form.text || ""}
                                         onChange={handleChange}
                                         rows={10}
-                                        placeholder="Der generierte Text kann hier bearbeitet werden..."
+                                        placeholder={t.edit_text_placeholder}
                                         className="w-full p-3 border border-gray-300 rounded-md"
                                     />
                                 </div>
@@ -231,7 +232,7 @@ const EditExpose = () => {
                                 {/* Buttons */}
                                 <div className="flex flex-col gap-3 pt-4">
                                     <button type="submit" className="w-full bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700" disabled={saving}>
-                                        Speichern
+                                        {t.edit_save}
                                     </button>
                                     <button
                                         type="button"
@@ -239,14 +240,14 @@ const EditExpose = () => {
                                         onClick={() => saveForm(true)}
                                         disabled={saving}
                                     >
-                                        Exposé neu erstellen
+                                        {t.edit_regenerate}
                                     </button>
                                     <button
                                         type="button"
                                         className="w-full bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                                         onClick={() => navigate("/expose/list")}
                                     >
-                                        Zurück
+                                        {t.edit_back_list}
                                     </button>
                                 </div>
                             </div>

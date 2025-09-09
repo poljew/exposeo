@@ -2,18 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
-//import background from "/BG_Home.png";
+import { useLanguage } from "./LanguageContext";
 
 const Settings = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
-    //const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [abo, setAbo] = useState("free");
     const [loading, setLoading] = useState(false);
     const background = "/assets/BG_Home.png";
-    
 
     const fetchUserData = async () => {
         const { data: user } = await supabase.auth.getUser();
@@ -37,27 +36,21 @@ const Settings = () => {
         const { data: user } = await supabase.auth.getUser();
         if (!user?.user) return;
 
-        const updates = {
-            id: user.user.id,
-            name,
-        };
+        const updates = { id: user.user.id, name };
 
         const { error } = await supabase.from("profiles").upsert(updates);
         if (error) {
-            alert("Fehler beim Speichern.");
+            alert(t.settings.save_error);
         } else {
-            alert("Einstellungen gespeichert.");
+            alert(t.settings.save_success);
         }
 
-        // Passwort ändern
         if (password) {
             const { error: pwError } = await supabase.auth.updateUser({ password });
-            if (pwError) {
-                alert("Fehler beim Passwort ändern");
-            }
+            if (pwError) alert(t.settings.password_error);
         }
     };
-    
+
     const fetchAboStatus = async () => {
         const { data: userData } = await supabase.auth.getUser();
         if (!userData?.user) return;
@@ -68,19 +61,16 @@ const Settings = () => {
             .eq("id", userData.user.id)
             .single();
 
-        if (!error && data?.abo) {
-            setAbo(data.abo);
-        }
+        if (!error && data?.abo) setAbo(data.abo);
     };
 
     const handleUpgrade = async (newTier) => {
-        if (!confirm(`Möchtest du wirklich auf den ${newTier}-Tarif wechseln?`)) return;
+        if (!confirm(t.settings.confirm_upgrade.replace("{tier}", newTier))) return;
 
         setLoading(true);
-
         const { data: userData } = await supabase.auth.getUser();
         if (!userData?.user) {
-            alert("Benutzer nicht gefunden.");
+            alert(t.settings.user_not_found);
             setLoading(false);
             return;
         }
@@ -93,10 +83,10 @@ const Settings = () => {
         setLoading(false);
 
         if (error) {
-            alert("Upgrade fehlgeschlagen.");
+            alert(t.settings.upgrade_failed);
             console.error(error);
         } else {
-            alert(`Upgrade auf ${newTier} erfolgreich.`);
+            alert(t.settings.upgrade_success.replace("{tier}", newTier));
             setAbo(newTier);
         }
     };
@@ -106,7 +96,13 @@ const Settings = () => {
         fetchAboStatus();
     }, []);
 
-    if (loading) return <p className="p-6 text-center">Lade Einstellungen...</p>;
+    if (loading) return <p className="p-6 text-center">{t.settings.loading}</p>;
+
+    const plans = [
+        { tier: "free", label: t.settings.plans.free.label, preis: "0 €", limit: t.settings.plans.free.limit },
+        { tier: "plus", label: t.settings.plans.plus.label, preis: "29 €/Monat", limit: t.settings.plans.plus.limit },
+        { tier: "premium", label: t.settings.plans.premium.label, preis: "100 €/Monat", limit: t.settings.plans.premium.limit },
+    ];
 
     return (
         <Layout>
@@ -115,13 +111,11 @@ const Settings = () => {
                 style={{ backgroundImage: `url(${background})` }}
             >
                 <div className="bg-white/90 backdrop-blur-md p-8 rounded-xl shadow-xl w-full max-w-xl">
-                    <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-                        Einstellungen
-                    </h1>
+                    <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">{t.settings.title}</h1>
 
                     <div className="space-y-4 text-gray-800">
                         <div>
-                            <label className="block font-medium mb-1">Name</label>
+                            <label className="block font-medium mb-1">{t.settings.name}</label>
                             <input
                                 type="text"
                                 value={name}
@@ -131,7 +125,7 @@ const Settings = () => {
                         </div>
 
                         <div>
-                            <label className="block font-medium mb-1">E-Mail (nicht &auml;nderbar)</label>
+                            <label className="block font-medium mb-1">{t.settings.email}</label>
                             <input
                                 type="email"
                                 value={email}
@@ -142,25 +136,20 @@ const Settings = () => {
                         </div>
 
                         <div>
-                            <label className="block font-medium mb-1">Neues Passwort</label>
+                            <label className="block font-medium mb-1">{t.settings.new_password}</label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Leer lassen, wenn nicht ändern"
+                                placeholder={t.settings.password_placeholder}
                                 className="w-full p-2 border border-gray-300 rounded"
                             />
                         </div>
 
                         <div>
-                            <h2 className="text-xl font-bold mb-4">Dein aktueller Tarif: <span className="text-blue-600">{abo}</span></h2>
-
+                            <h2 className="text-xl font-bold mb-4">{t.settings.current_plan}: <span className="text-blue-600">{abo}</span></h2>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                {[
-                                    { tier: "free", label: "Free", preis: "0 €", limit: "3 Exposés / Monat" },
-                                    { tier: "plus", label: "Plus", preis: "29 €/Monat", limit: "20 Exposés / Monat" },
-                                    { tier: "premium", label: "Premium", preis: "100 €/Monat", limit: "100 Exposés + individuelle Features" },
-                                ].map(plan => (
+                                {plans.map(plan => (
                                     <div key={plan.tier} className="border p-4 rounded-lg shadow bg-white">
                                         <h3 className="text-lg font-bold">{plan.label}</h3>
                                         <p className="text-sm mt-2">{plan.limit}</p>
@@ -170,30 +159,29 @@ const Settings = () => {
                                             onClick={() => handleUpgrade(plan.tier)}
                                             disabled={abo === plan.tier || loading}
                                             className={`mt-4 w-full px-4 py-2 rounded ${abo === plan.tier
-                                                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                                                    : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                                                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                                : "bg-cyan-600 hover:bg-cyan-700 text-white"
                                                 }`}
                                         >
-                                            {abo === plan.tier ? "Aktueller Tarif" : `Zu ${plan.label} wechseln`}
+                                            {abo === plan.tier ? t.settings.current_plan_btn : t.settings.upgrade_btn.replace("{tier}", plan.label)}
                                         </button>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-
                         <button
                             onClick={handleSave}
                             className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white font-medium py-2 px-4 rounded"
                         >
-                            &Auml;nderungen speichern
+                            {t.settings.save_changes}
                         </button>
 
                         <button
                             onClick={() => navigate("/dashboard")}
                             className="mt-6 block w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded text-center"
                         >
-                            &larr; Zur&uuml;ck zum Dashboard
+                            &larr; {t.settings.back_dashboard}
                         </button>
                     </div>
                 </div>

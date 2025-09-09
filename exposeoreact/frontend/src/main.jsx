@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "./LanguageContext.jsx";
 import DashboardPage from "./DashboardPage";
-import NewExpose from "./NewExpose";
+import NewExpose  from "./NewExpose";
 import ExposeList from "./ExposeList";
 import ExposeDetail from "./ExposeDetail";
 import LoginPage from "./LoginPage";
@@ -17,6 +18,7 @@ import "./index.css";
 import "./App.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+    <LanguageProvider>
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
@@ -32,8 +34,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/preise" element={<Preise />} />
                 <Route path="/impressum" element={<Impressum />} />
-                <Route path="*" element={<div>404 - Seite nicht gefunden</div>} />
+                <Route path="*" element={<LoginPage />} />
             </Routes>
         </BrowserRouter>
-    </React.StrictMode>
+        </React.StrictMode>
+    </LanguageProvider>
 );

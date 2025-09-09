@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://api-exposeo.onrender.com/api/$1",
+      "status": 200
+    }
+  ]
+}
