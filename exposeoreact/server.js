@@ -17,7 +17,7 @@ app.use(express.json());
 // Pfade für __dirname / __filename definieren (weil ESM)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const { t } = translations();
+const t = translations.en;
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
