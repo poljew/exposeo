@@ -3,29 +3,31 @@ import { supabase } from "./supabaseClient";
 import { generateExposeText } from "./ai/generateExposeText";
 import { useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext";
 
 export default function NewExpose() {
     const background = "/assets/BG_Home1.png";
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         adresse: "",
         wohnflaeche: "",
         grundstueck: "",
         baujahr: "",
-        immobilientyp: [],
+        immobilientyp: "",
         ausstattung: [],
         zimmer: "",
         zustand: "",
         energieausweis: "",
         besonderheiten: "",
         zielgruppe: [],
-        tonfall: "sachlich",
+        tonfall: "objective", // Default englischer Schlüssel
         eigenerTonfall: "",
         preis: "",
         bilder: [],
-        exposeText: "",
-        createdAt: new Date().toISOString(),
+        text: "",
+        created_at: new Date().toISOString()
     });
 
     const handleChange = (e) => {
@@ -64,57 +66,30 @@ export default function NewExpose() {
                 if (publicUrl?.publicUrl) imageUrls.push(publicUrl.publicUrl);
             }
 
-            const exposeText = await generateExposeText(form);
+            const exposeText = await generateExposeText(form, t);
             const { data: { user } } = await supabase.auth.getUser();
 
-            const { data, error } = await supabase.from("exposes").insert([
+            const { error } = await supabase.from("exposes").insert([
                 {
-                    adresse: form.adresse,
+                    ...form,
                     wohnflaeche: Number(form.wohnflaeche),
                     grundstueck: Number(form.grundstueck),
-                    immobilientyp: form.immobilientyp,
                     baujahr: Number(form.baujahr),
-                    ausstattung: form.ausstattung,
                     zimmer: Number(form.zimmer),
-                    zustand: form.zustand,
-                    energieausweis: form.energieausweis,
-                    besonderheiten: form.besonderheiten,
-                    zielgruppe: form.zielgruppe,
-                    tonfall: form.tonfall,
-                    preis: form.preis,
                     bilder: imageUrls,
                     text: exposeText,
-                    created_at: form.createdAt,
                     user_id: user.id,
                 },
             ]);
 
             if (error) {
-                alert("Fehler beim Speichern: " + error.message);
+                alert(t.error_message + error.message);
             } else {
-                alert("Exposé erfolgreich gespeichert!");
+                alert(t.success_message);
                 navigate("/expose/list");
-                setForm({
-                    adresse: "",
-                    wohnflaeche: "",
-                    grundstueck: "",
-                    immobilientyp: "",
-                    baujahr: "",
-                    ausstattung: [],
-                    zimmer: "",
-                    zustand: "",
-                    energieausweis: "",
-                    besonderheiten: "",
-                    zielgruppe: [],
-                    tonfall: "sachlich",
-                    preis: "",
-                    bilder: [],
-                    text: exposeText,
-                    createdAt: new Date().toISOString(),
-                });
             }
         } catch (error) {
-            alert("Ein Fehler ist aufgetreten: " + error.message);
+            alert(t.unexpected_error + error.message);
         } finally {
             setLoading(false);
         }
@@ -125,7 +100,7 @@ export default function NewExpose() {
             {loading && (
                 <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
                     <div className="text-xl font-semibold text-blue-600 animate-pulse">
-                        Speichere Expos&eacute;...
+                        {t.saving_expose}
                     </div>
                 </div>
             )}
@@ -138,10 +113,10 @@ export default function NewExpose() {
                         onClick={() => navigate("/dashboard")}
                         className="mb-6 w-full md:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zur&uuml;ck zum Dashboard
+                        &larr; {t.back_to_dashboard}
                     </button>
                     <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-                        Neues Expos&eacute; erstellen
+                        {t.new_expose_title}
                     </h1>
                     <form
                         onSubmit={handleSubmit}
@@ -152,7 +127,7 @@ export default function NewExpose() {
                             <input
                                 type="text"
                                 name="adresse"
-                                placeholder="Adresse"
+                                placeholder={t.adresse}
                                 className="w-full p-3 border rounded"
                                 value={form.adresse}
                                 onChange={handleChange}
@@ -160,13 +135,15 @@ export default function NewExpose() {
                             <input
                                 type="number"
                                 name="wohnflaeche"
-                                placeholder="Wohnfl&auml;che (m²)"
+                                placeholder={t.wohnflaeche}
                                 className="w-full p-3 border rounded"
                                 value={form.wohnflaeche}
                                 onChange={handleChange}
                             />
                             <div>
-                                <label className="block font-semibold mb-1">Immobilientyp</label>
+                                <label className="block font-semibold mb-1">
+                                    {t.immobilientyp_label}
+                                </label>
                                 <select
                                     name="immobilientyp"
                                     value={form.immobilientyp}
@@ -174,16 +151,16 @@ export default function NewExpose() {
                                     className="w-full p-2 border rounded"
                                     required
                                 >
-                                    <option value="">Bitte w&auml;hlen</option>
-                                    <option value="Haus">Haus</option>
-                                    <option value="Wohnung">Wohnung</option>
-                                    <option value="Garage">Garage</option>
+                                    <option value="">{t.immobilientyp_placeholder}</option>
+                                    <option value="house">{t.immobilientyp_options.haus}</option>
+                                    <option value="apartment">{t.immobilientyp_options.wohnung}</option>
+                                    <option value="garage">{t.immobilientyp_options.garage}</option>
                                 </select>
                             </div>
                             <input
                                 type="number"
                                 name="grundstueck"
-                                placeholder="Grundst&uuml;ck (m²)"
+                                placeholder={t.grundstueck}
                                 className="w-full p-3 border rounded"
                                 value={form.grundstueck}
                                 onChange={handleChange}
@@ -191,14 +168,14 @@ export default function NewExpose() {
                             <input
                                 type="number"
                                 name="baujahr"
-                                placeholder="Baujahr"
+                                placeholder={t.baujahr}
                                 className="w-full p-3 border rounded"
                                 value={form.baujahr}
                                 onChange={handleChange}
                             />
                             <textarea
                                 name="besonderheiten"
-                                placeholder="Besonderheiten / Notizen"
+                                placeholder={t.besonderheiten}
                                 className="w-full p-3 border rounded"
                                 rows={5}
                                 value={form.besonderheiten}
@@ -209,18 +186,18 @@ export default function NewExpose() {
                         {/* Spalte 2 */}
                         <div className="space-y-4">
                             <fieldset>
-                                <legend className="font-semibold mb-2">Ausstattung</legend>
+                                <legend className="font-semibold mb-2">{t.ausstattung}</legend>
                                 <div className="space-y-1">
-                                    {["Balkon", "Einbauküche", "Garage"].map((item) => (
-                                        <label key={item} className="block">
+                                    {Object.entries(t.ausstattung_options).map(([key, label]) => (
+                                        <label key={key} className="block">
                                             <input
                                                 type="checkbox"
                                                 name="ausstattung"
-                                                value={item}
-                                                checked={form.ausstattung.includes(item)}
+                                                value={key} // Schlüssel speichern
+                                                checked={form.ausstattung.includes(key)}
                                                 onChange={handleChange}
                                             />{" "}
-                                            {item}
+                                            {label}
                                         </label>
                                     ))}
                                 </div>
@@ -229,7 +206,7 @@ export default function NewExpose() {
                             <input
                                 type="number"
                                 name="zimmer"
-                                placeholder="Anzahl Zimmer"
+                                placeholder={t.zimmer}
                                 className="w-full p-2 border rounded"
                                 value={form.zimmer}
                                 onChange={handleChange}
@@ -241,10 +218,12 @@ export default function NewExpose() {
                                 onChange={handleChange}
                                 className="w-full p-2 border rounded"
                             >
-                                <option value="">Zustand w&auml;hlen</option>
-                                <option value="neuwertig">Neuwertig</option>
-                                <option value="gepflegt">Gepflegt</option>
-                                <option value="renovierungsbedürftig">Renovierungsbed&uuml;rftig</option>
+                                <option value="">{t.zustand}</option>
+                                <option value="new">{t.zustand_options.neuwertig}</option>
+                                <option value="well_maintained">{t.zustand_options.gepflegt}</option>
+                                <option value="needs_renovation">
+                                    {t.zustand_options.renovierungsbeduerftig}
+                                </option>
                             </select>
 
                             <select
@@ -253,53 +232,57 @@ export default function NewExpose() {
                                 onChange={handleChange}
                                 className="w-full p-2 border rounded"
                             >
-                                <option value="">Energieausweis w&auml;hlen</option>
-                                <option value="liegt vor">liegt vor</option>
-                                <option value="nicht erforderlich">nicht erforderlich</option>
-                                <option value="in Vorbereitung">in Vorbereitung</option>
+                                <option value="">{t.energieausweis}</option>
+                                <option value="available">{t.energieausweis_options.liegt_vor}</option>
+                                <option value="not_required">
+                                    {t.energieausweis_options.nicht_erforderlich}
+                                </option>
+                                <option value="in_preparation">
+                                    {t.energieausweis_options.in_vorbereitung}
+                                </option>
                             </select>
 
                             <fieldset>
-                                <legend className="font-semibold mb-2">Zielgruppe</legend>
+                                <legend className="font-semibold mb-2">{t.zielgruppe}</legend>
                                 <div className="space-y-1">
-                                    {["Familie", "Kapitalanleger"].map((item) => (
-                                        <label key={item} className="block">
+                                    {Object.entries(t.zielgruppe_options).map(([key, label]) => (
+                                        <label key={key} className="block">
                                             <input
                                                 type="checkbox"
                                                 name="zielgruppe"
-                                                value={item}
-                                                checked={form.zielgruppe.includes(item)}
+                                                value={key} // Schlüssel speichern
+                                                checked={form.zielgruppe.includes(key)}
                                                 onChange={handleChange}
                                             />{" "}
-                                            {item}
+                                            {label}
                                         </label>
                                     ))}
                                 </div>
                             </fieldset>
 
                             <div>
-                                <label className="font-semibold block mb-1">Tonfall</label>
+                                <label className="font-semibold block mb-1">{t.tonfall}</label>
                                 <select
                                     name="tonfall"
                                     value={form.tonfall}
                                     onChange={handleChange}
                                     className="w-full p-3 border rounded"
                                 >
-                                    <option value="sachlich">Sachlich</option>
-                                    <option value="neutral">Neutral</option>
-                                    <option value="freundlich">Freundlich</option>
-                                    <option value="professionell">Professionell</option>
-                                    <option value="luxuriös">Luxuriös</option>
-                                    <option value="emotional">Emotional</option>
-                                    <option value="locker">Locker</option>
-                                    <option value="eigener">Eigener</option>
+                                    <option value="objective">{t.tonfall_options.sachlich}</option>
+                                    <option value="friendly">{t.tonfall_options.freundlich}</option>
+                                    <option value="luxury">{t.tonfall_options.luxurioes}</option>
+                                    <option value="professional">{t.tonfall_options.professionell}</option>
+                                    <option value="casual">{t.tonfall_options.locker}</option>
+                                    <option value="emotional">{t.tonfall_options.emotional}</option>
+                                    <option value="neutral">{t.tonfall_options.neutral}</option>
+                                    <option value="custom">{t.tonfall_options.eigener}</option>
                                 </select>
 
-                                {form.tonfall === "eigener" && (
+                                {form.tonfall === "custom" && (
                                     <input
                                         type="text"
                                         name="eigenerTonfall"
-                                        placeholder="z.B. humorvoll, charmant..."
+                                        placeholder={t.eigenerTonfall_placeholder}
                                         value={form.eigenerTonfall}
                                         onChange={handleChange}
                                         className="mt-2 w-full p-2 border rounded"
@@ -307,7 +290,7 @@ export default function NewExpose() {
                                 )}
                             </div>
 
-                            <label className="block mb-2 font-medium">Preis (EUR)</label>
+                            <label className="block mb-2 font-medium">{t.preis_label}</label>
                             <input
                                 type="number"
                                 name="preis"
@@ -317,7 +300,7 @@ export default function NewExpose() {
                             />
 
                             <div>
-                                <label className="font-semibold block mb-1">Bilder hochladen</label>
+                                <label className="font-semibold block mb-1">{t.bilder_label}</label>
                                 <input
                                     type="file"
                                     name="bilder"
@@ -335,12 +318,11 @@ export default function NewExpose() {
                             className={`col-span-1 md:col-span-2 bg-cyan-600 text-white px-4 py-3 rounded hover:bg-cyan-700 ${loading ? "opacity-50 cursor-not-allowed" : ""
                                 }`}
                         >
-                            Expos&eacute; erstellen
+                            {t.submit_button}
                         </button>
                     </form>
                 </div>
             </div>
         </Layout>
     );
-};
-
+}

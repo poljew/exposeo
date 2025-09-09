@@ -2,8 +2,10 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
+import { useLanguage } from "./LanguageContext.jsx";
 
 const ExposeList = () => {
+    const { t } = useLanguage();
     const [exposes, setExposes] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -31,7 +33,7 @@ const ExposeList = () => {
     }, []);
 
     const handleDelete = async (id, bilder = []) => {
-        if (!window.confirm("Dieses Exposé und alle Bilder wirklich löschen?")) return;
+        if (!window.confirm(t.list_delete_confirm)) return;
 
         try {
             const fileNames = bilder.map((url) => url.split("/").pop());
@@ -42,8 +44,8 @@ const ExposeList = () => {
                     .remove(fileNames);
 
                 if (storageError) {
-                    console.error("Fehler beim Löschen der Bilder:", storageError.message);
-                    alert("Einige Bilder konnten nicht gelöscht werden.");
+                    console.error(t.list_delete_error, storageError.message);
+                    alert(t.list_delete_images_error);
                 }
             }
 
@@ -53,14 +55,14 @@ const ExposeList = () => {
                 .eq("id", id);
 
             if (deleteError) {
-                console.error("Fehler beim Löschen des Exposés:", deleteError.message);
-                alert("Fehler beim Löschen des Exposés.");
+                console.error(t.list_delete_error, deleteError.message);
+                alert(t.list_delete_error);
             } else {
                 setExposes((prev) => prev.filter((e) => e.id !== id));
             }
         } catch (err) {
-            console.error("Unerwarteter Fehler beim Löschen:", err.message);
-            alert("Ein Fehler ist aufgetreten.");
+            console.error(t.list_delete_error, err.message);
+            alert(t.list_delete_unexpected);
         }
     };
 
@@ -75,13 +77,13 @@ const ExposeList = () => {
                         onClick={() => navigate("/dashboard")}
                         className="mb-6 w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zur&uuml;ck zum Dashboard
+                        &larr; {t.list_back}
                     </button>
 
-                    <h1 className="text-2xl sm:text-3xl font-bold text-center mb-8">Meine Exposés</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-center mb-8">{t.list_title}</h1>
 
                     {loading ? (
-                        <p className="text-center text-gray-700">Lade Exposés...</p>
+                        <p className="text-center text-gray-700">{t.list_loading}</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {exposes.map((expose) => (
@@ -90,9 +92,9 @@ const ExposeList = () => {
                                     className="bg-white shadow-lg rounded-xl overflow-hidden p-4 flex flex-col"
                                 >
                                     <h2 className="text-lg sm:text-xl font-semibold mb-2">{expose.adresse}</h2>
-                                    <p><strong>Wohnfl&auml;che:</strong> {expose.wohnflaeche} m²</p>
-                                    <p><strong>Grundst&uuml;ck:</strong> {expose.grundstueck} m²</p>
-                                    <p><strong>Baujahr:</strong> {expose.baujahr}</p>
+                                    <p><strong>{t.list_area}</strong> {expose.wohnflaeche} m²</p>
+                                    <p><strong>{t.list_plot}</strong> {expose.grundstueck} m²</p>
+                                    <p><strong>{t.list_year}</strong> {expose.baujahr}</p>
 
                                     {expose.bilder?.length > 0 && (
                                         <img
@@ -108,13 +110,13 @@ const ExposeList = () => {
                                             className="w-full bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700"
                                             onClick={() => navigate(`/expose/edit/${expose.id}`)}
                                         >
-                                            Bearbeiten
+                                            {t.list_edit}
                                         </button>
                                         <button
                                             className="w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                                             onClick={() => handleDelete(expose.id, expose.bilder)}
                                         >
-                                            L&ouml;schen
+                                            {t.list_delete}
                                         </button>
                                     </div>
                                 </div>

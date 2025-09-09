@@ -3,8 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Layout from "./components/Layout";
 import html2pdf from "html2pdf.js";
+import { useLanguage } from "./LanguageContext.jsx";
 
 const ExposeDetail = () => {
+    const { t } = useLanguage();
     const { id } = useParams();
     const [expose, setExpose] = useState(null);
     const navigate = useNavigate();
@@ -119,7 +121,7 @@ const ExposeDetail = () => {
     };
 
     const handleDelete = async (id, bilder = []) => {
-        if (!window.confirm("Dieses Exposé und alle Bilder wirklich löschen?")) return;
+        if (!window.confirm(t.detail_delete_confirm)) return;
         try {
             const fileNames = bilder.map((url) => url.split("/").pop());
             if (fileNames.length > 0) {
@@ -128,12 +130,12 @@ const ExposeDetail = () => {
             await supabase.from("exposes").delete().eq("id", id);
             navigate("/expose/list");
         } catch (err) {
-            console.error("Fehler:", err);
-            alert("Löschen fehlgeschlagen.");
+            console.error("Error:", err);
+            alert(t.detail_delete_error);
         }
     };
 
-    if (!expose) return <div className="p-6 text-center text-gray-700">Exposé wird geladen...</div>;
+    if (!expose) return <div className="p-6 text-center text-gray-700">{t.detail_loading}</div>;
 
     return (
         <Layout>
@@ -146,14 +148,14 @@ const ExposeDetail = () => {
                         onClick={() => navigate(-1)}
                         className="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded"
                     >
-                        &larr; Zur&uuml;ck
+                        &larr; {t.detail_back}
                     </button>
 
                     <div ref={exportRef} className="bg-white p-4 sm:p-6 rounded shadow">
                         <div className="text-sm font-semibold underline mb-4">
                             <div>{expose.adresse}</div>
                             <div>
-                                Wohnfl&auml;che: {expose.wohnflaeche} m&sup2; | Grundst&uuml;ck: {expose.grundstueck} m&sup2; | Baujahr: {expose.baujahr}
+                                {t.detail_area}: {expose.wohnflaeche} m&sup2; | {t.detail_plot}: {expose.grundstueck} m&sup2; | {t.detail_year}: {expose.baujahr}
                             </div>
                         </div>
                         <div className="text-gray-800 whitespace-pre-wrap mb-6">
@@ -166,19 +168,19 @@ const ExposeDetail = () => {
                             className="bg-cyan-600 text-white px-4 py-2 rounded hover:bg-cyan-700 w-full sm:w-auto"
                             onClick={() => navigate(`/expose/edit/${expose.id}`)}
                         >
-                            Bearbeiten
+                            {t.detail_edit}
                         </button>
                         <button
                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full sm:w-auto"
                             onClick={() => handleDelete(expose.id, expose.bilder)}
                         >
-                            L&ouml;schen
+                            {t.detail_delete}
                         </button>
                         <button
                             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full sm:w-auto"
                             onClick={handleExportPDF}
                         >
-                            Als PDF exportieren
+                            {t.detail_pdf}
                         </button>
                     </div>
                 </div>

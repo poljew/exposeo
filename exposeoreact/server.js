@@ -49,7 +49,7 @@ Bitte schreibe einen ansprechenden Exposé-Text.
                 Authorization: `Bearer ${process.env.VITE_OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4o-mini",
+                model: "gpt-4o",
                 messages: [{ role: "user", content: prompt }],
             }),
         });
