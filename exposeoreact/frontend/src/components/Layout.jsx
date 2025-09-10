@@ -35,8 +35,8 @@ const Layout = ({ children }) => {
                 >
                     <option value="de">DE Deutsch</option>
                     <option value="en">EN English</option>
-                    <option value="ru">RU Русский</option>
-                    <option value="es">ES Spanish</option>
+                    {/*<option value="ru">RU Русский</option>*/}
+                    {/*<option value="es">ES Spanish</option>*/}
                 </select>
             </div>
             {/* Inhalt */}

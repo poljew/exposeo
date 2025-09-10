@@ -1,5 +1,5 @@
 ﻿import React, { createContext, useState, useContext, useEffect } from "react";
-import { translations } from "./translations";
+import { translations } from "../../translations";
 
 const LanguageContext = createContext();
 
@@ -22,8 +22,8 @@ export const LanguageProvider = ({ children }) => {
     const languages = [
         { code: "de", label: "Deutsch", countryCode: "DE" },
         { code: "en", label: "English", countryCode: "GB" },
-        { code: "ru", label: "Русский", countryCode: "RU" },
-        { code: "es", label: "Español", countryCode: "ES" }
+        //{ code: "ru", label: "Русский", countryCode: "RU" },
+        //{ code: "es", label: "Español", countryCode: "ES" }
     ];
 
     const LanguageSwitcher = () => (

@@ -17,7 +17,7 @@ app.use(express.json());
 // Pfade für __dirname / __filename definieren (weil ESM)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const t = translations.en;
+const t = translations.selected_language;
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
@@ -52,7 +52,7 @@ ${t.prompt_part_1} ${form.tonfall} ${t.prompt_part_5} ${t.given_language}. ${t.p
 ${t.prompt_part_2} ${form.adresse} ${t.prompt_part_3} ${form.adresse}.
 ${t.prompt_part_6} ${t.given_language}. 
 `;
-        
+        console.log(prompt); console.log(selected_language);
        
 //        const prompt = `
 //Erstelle ein Immobilien-Exposé im Tonfall "${form.tonfall}".
@@ -72,7 +72,7 @@ ${t.prompt_part_6} ${t.given_language}.
 
 //Bitte schreibe einen ansprechenden Exposé-Text.
 //`;
-
+        console.log(prompt);
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
