@@ -1,5 +1,6 @@
 export const translations = {
     de: {
+        selected_language:"de",
         home_welcome: "Willkommen bei ExposéO",
         home_description1: "Mit ExposéO erstellen Sie hochwertige Immobilien-Exposés in wenigen Minuten – automatisch, stilvoll und auf Knopfdruck.",
         home_description2: "In der Testphase nutzen Sie ausschließlich unser Free-Modell – und können unbegrenzt viele Exposés erstellen.",
@@ -240,6 +241,7 @@ export const translations = {
     },
 
     en: {
+        selected_language: "en",
         home_welcome: "Welcome to ExposéO",
         home_description1: "With ExposéO you can create high-quality real estate exposés in just a few minutes – automatically, stylishly and at the push of a button.",
         home_description2: "During the trial phase you only use our Free plan – and can create unlimited exposés.",
