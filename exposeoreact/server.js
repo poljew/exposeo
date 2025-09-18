@@ -39,7 +39,7 @@ Hier sind die Eckdaten:
 - Zielgruppe: ${form.zielgruppe.join(", ")}
 - Preis: ${form.preis} EUR
 
-Bitte schreibe einen ansprechenden Exposé-Text.
+Bitte schreibe einen ansprechenden Exposé-Text.Falls Adresse ${form.adresse} befüllt ist, berücksichtige die positiven Faktoren des Lebens in ${form.adresse}.
 `;
 
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
